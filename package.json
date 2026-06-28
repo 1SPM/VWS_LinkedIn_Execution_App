@@ -1,0 +1,10 @@
+{
+  "name": "vws-linkedin-execution-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "VWS / Divinity LinkedIn execution dashboard",
+  "scripts": {
+    "dev": "python3 -m http.server 8001 --directory .",
+    "serve": "python3 -m http.server 8001 --directory ."
+  }
+}

@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VWS / Divinity LinkedIn Execution App</title>
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--bg:#07101f;--panel:#0f1830;--line:rgba(255,255,255,.10);--text:#eaf0ff;--muted:#aab7d6;--accent:#6aa7ff;--accent2:#3ddc97;--warn:#ffd166;--hot:#ff6b6b;--shadow:0 12px 40px rgba(0,0,0,.24);--radius:16px}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font:14px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#06101f,#07101f 25%,#060b18);color:var(--text)}
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{background:linear-gradient(135deg,rgba(106,167,255,.16),rgba(61,220,151,.08));border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+    .hero h1{margin:0 0 8px;font-size:28px}.hero p{margin:0;color:var(--muted);max-width:1050px}
+    .toolbar,.nav,.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .toolbar{margin-top:14px}.nav{margin:16px 0 20px}
+    .btn,.tab,input,select,textarea{font:inherit}
+    .btn{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:9px 12px;border-radius:999px;cursor:pointer}
+    .btn:hover{background:rgba(255,255,255,.07)}
+    .btn.primary{background:rgba(106,167,255,.16);border-color:rgba(106,167,255,.32)}
+    .btn.good{background:rgba(61,220,151,.14);border-color:rgba(61,220,151,.28)}
+    .btn.warn{background:rgba(255,209,102,.14);border-color:rgba(255,209,102,.28)}
+    .btn.danger{background:rgba(255,107,107,.14);border-color:rgba(255,107,107,.28)}
+    .tab{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);cursor:pointer;user-select:none}
+    .tab.active{background:rgba(106,167,255,.18);border-color:rgba(106,167,255,.35)}
+    .section{display:none}.section.active{display:block}
+    .grid{display:grid;gap:14px}.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    @media (max-width:1200px){.cols-3,.cols-4{grid-template-columns:1fr 1fr}.cols-2{grid-template-columns:1fr}}
+    @media (max-width:720px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
+    .card{background:rgba(15,24,48,.96);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    .card h2,.card h3{margin:0 0 12px}.card h2{font-size:18px}.card h3{font-size:15px;color:#dce6ff}
+    .muted{color:var(--muted)} .small{font-size:12px;color:var(--muted)}
+    .metric{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+    .metric .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.metric .value{margin-top:4px;font-size:28px;font-weight:800}
+    .metric.good .value{color:#8ef0c5}.metric.warn .value{color:#ffe29d}.metric.hot .value{color:#ffb0b0}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
+    table{width:100%;border-collapse:collapse;min-width:1280px}
+    th,td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+    th{position:sticky;top:0;background:#12203d;text-transform:uppercase;letter-spacing:.07em;font-size:11px;color:#dbe4ff;z-index:1}
+    tbody tr:hover{background:rgba(255,255,255,.03)}
+    td[contenteditable="true"]{outline:none} td[contenteditable="true"]:focus{background:rgba(106,167,255,.08)}
+    select,input[type="search"],input[type="email"],textarea{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 10px;outline:none}
+    textarea{width:100%;min-height:90px;resize:vertical}
+    input[type="search"],input[type="email"]{min-width:240px}
+    .pill{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
+    .pill.green{background:rgba(61,220,151,.12);color:#bff9de}.pill.yellow{background:rgba(255,209,102,.12);color:#ffe6aa}.pill.blue{background:rgba(106,167,255,.12);color:#cae0ff}.pill.gray{background:rgba(127,140,168,.12);color:#dbe3f6}.pill.hot{background:rgba(255,107,107,.12);color:#ffd0d0}
+    .footer{margin:18px 0 0;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+    .hidden{display:none !important}.kbd{display:inline-block;padding:2px 6px;border-radius:6px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+    .preview-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.preview{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+    .preview .n{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.preview .v{font-size:22px;font-weight:800;margin-top:5px}
+    .statusbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}.dot{width:10px;height:10px;border-radius:50%}.dot.ok{background:var(--accent2)}.dot.warn{background:var(--warn)}.dot.off{background:#6f7d9b}
+    .syncbox{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <h1>VWS / Divinity LinkedIn Execution App</h1>
+          <p>Interactive browser dashboard for targets, Top 25 ranking, groups, posts, DMs, weekly execution, and KPI review. Supports shared storage via Supabase when configured.</p>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="btnSeed">Load Sample Data</button>
+          <button class="btn" id="btnExport">Export JSON</button>
+          <label class="btn" for="importFile" style="cursor:pointer;">Import JSON</label>
+          <input id="importFile" type="file" accept="application/json" class="hidden" />
+          <button class="btn danger" id="btnClear">Clear All</button>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="btn good" id="btnAddTarget">+ Add Target</button>
+        <button class="btn" id="btnAddGroup">+ Add Group</button>
+        <button class="btn" id="btnAddScript">+ Add Script</button>
+        <button class="btn warn" id="btnSyncNow">Sync Now</button>
+      </div>
+      <div class="syncbox">
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <span class="dot off" id="syncDot"></span>
+            <strong id="syncLabel">Local mode</strong>
+            <span class="small" id="syncDetail">No shared storage configured yet.</span>
+          </div>
+          <div class="row" id="authControls">
+            <input id="emailInput" type="email" placeholder="team member email for magic link" />
+            <button class="btn primary" id="btnMagicLink">Send Magic Link</button>
+            <button class="btn hidden" id="btnSignOut">Sign Out</button>
+          </div>
+        </div>
+        <div class="small" id="userLabel" style="margin-top:8px;">Not signed in.</div>
+      </div>
+    </div>
+
+    <div class="nav" id="navTabs">
+      <div class="tab active" data-tab="dashboard">Dashboard</div>
+      <div class="tab" data-tab="targets">Targets</div>
+      <div class="tab" data-tab="top25">Top 25</div>
+      <div class="tab" data-tab="groups">Groups</div>
+      <div class="tab" data-tab="scripts">Posts + DM Scripts</div>
+      <div class="tab" data-tab="weekly">Weekly Plan</div>
+      <div class="tab" data-tab="kpis">KPI Review</div>
+    </div>
+
+    <section id="dashboard" class="section active">
+      <div class="grid cols-4" style="margin-bottom:14px">
+        <div class="metric good"><div class="label">Total Targets</div><div class="value" id="mTotalTargets">0</div></div>
+        <div class="metric warn"><div class="label">Top Priority</div><div class="value" id="mTopPriority">0</div></div>
+        <div class="metric"><div class="label">Replies This Week</div><div class="value" id="mReplies">0</div></div>
+        <div class="metric hot"><div class="label">Meetings Booked</div><div class="value" id="mMeetings">0</div></div>
+      </div>
+      <div class="grid cols-4" style="margin-bottom:14px">
+        <div class="preview"><div class="n">Uncontacted</div><div class="v" id="mUncontacted">0</div></div>
+        <div class="preview"><div class="n">Connected</div><div class="v" id="mConnected">0</div></div>
+        <div class="preview"><div class="n">DM Sent</div><div class="v" id="mDmSent">0</div></div>
+        <div class="preview"><div class="n">In Conversation</div><div class="v" id="mInConversation">0</div></div>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <h2>Pipeline Health</h2>
+          <div class="table-wrap"><table style="min-width:0"><thead><tr><th>Status</th><th>Count</th></tr></thead><tbody id="pipelineTable"></tbody></table></div>
+        </div>
+        <div class="card">
+          <h2>Category Distribution</h2>
+          <div class="table-wrap"><table style="min-width:0"><thead><tr><th>Category</th><th>Count</th></tr></thead><tbody id="categoryTable"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="targets" class="section">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h2>Targets</h2>
+            <div class="small">Editable lead list. Click cells to edit. Score updates automatically.</div>
+          </div>
+          <div class="row">
+            <input id="searchTargets" type="search" placeholder="Search name, org, title, notes..." />
+            <select id="filterCategory"><option value="">All Categories</option></select>
+            <select id="filterStatus"><option value="">All DM Statuses</option></select>
+            <button class="btn" id="btnResetFilters">Reset Filters</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table id="targetsTable"><thead><tr>
+          <th>Rank</th><th>Name</th><th>Title</th><th>Organization</th><th>Category</th><th>Source</th><th>Priority Score</th><th>Mission Fit</th><th>Influence</th><th>Decision Power</th><th>Trust Potential</th><th>Strategic Leverage</th><th>Tier</th><th>Connection Status</th><th>Engagement Status</th><th>DM Status</th><th>Last Touch</th><th>Next Action</th><th>Next Action Date</th><th>Pillar</th><th>Notes</th><th>Outcome</th><th>Owner</th><th>Actions</th>
+        </tr></thead><tbody></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="top25" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Top 25</h2><div class="small">Auto-sorted by score. Keep this list elite.</div></div><button class="btn" id="btnFocusTop25">Refresh Top 25</button></div><div class="table-wrap"><table id="top25Table"><thead><tr><th>Rank</th><th>Name</th><th>Category</th><th>Score</th><th>Tier</th><th>Connection</th><th>DM Status</th><th>Next Action</th><th>Next Action Date</th><th>Pillar</th><th>Notes</th></tr></thead><tbody></tbody></table></div></div></section>
+
+    <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2><div class="small">Track groups, relevance, and action.</div></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Group Name</th><th>Category</th><th>Size</th><th>Relevance</th><th>Access Level</th><th>Admins / Influencers</th><th>Engagement Value</th><th>Notes</th><th>Action</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+
+    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Posts + DM Scripts</h2><div class="small">Store hooks, drafts, CTAs, and use cases here.</div></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Hook</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+
+    <section id="weekly" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Weekly Plan</h2><div class="small">Use this to keep the system moving.</div></div><button class="btn" id="btnLoadWeek">Reset Week Template</button></div><div class="table-wrap"><table id="weeklyTable" style="min-width:0"><thead><tr><th>Day</th><th>Focus</th><th>Output</th><th>Completed</th></tr></thead><tbody></tbody></table></div></div></section>
+
+    <section id="kpis" class="section">
+      <div class="grid cols-3">
+        <div class="card"><h2>Leading Indicators</h2><ul><li>Profile visits from target personas</li><li>Connection accepts</li><li>Meaningful comments</li><li>DM response rate</li></ul></div>
+        <div class="card"><h2>Mid-Funnel Indicators</h2><ul><li>Conversations started</li><li>Meetings booked</li><li>Introductions received</li><li>Follow-up replies</li></ul></div>
+        <div class="card"><h2>Outcome Indicators</h2><ul><li>Partnerships</li><li>Pilots</li><li>Investor interest</li><li>Advisor interest</li></ul></div>
+      </div>
+      <div class="card" style="margin-top:14px"><h2>Notes</h2><div class="small">Every target must have a score, status, next action, and next action date.</div></div>
+    </section>
+
+    <div class="footer">Tip: Use <span class="kbd">Ctrl/Cmd + F</span> for fast search. Data persists in the browser and can optionally sync to Supabase.</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'vws_linkedin_dashboard_v3';
+    const APP_CONFIG = window.APP_CONFIG || { supabaseUrl:'', supabaseAnonKey:'', tableName:'vws_dashboard_state', rowId:'primary' };
+    const hasConfig = !!(APP_CONFIG.supabaseUrl && APP_CONFIG.supabaseAnonKey);
+    const CATEGORIES = ['Faith + Church Tech','Faith Investors','Fintech','Responsible AI','Nonprofit Tech'];
+    const CONNECTION = ['Uncontacted','Requested','Connected'];
+    const ENGAGEMENT = ['Cold','Warmed','Active'];
+    const DMSTATUS = ['Not Sent','Sent','Replied','Follow-up','Booked'];
+    const NEXTACTION = ['Comment','Connect','DM','Follow-up','Call'];
+    const PILLARS = ['Faith meets infrastructure','Ethical AI in spiritual contexts','The future of community','Financial stewardship and fintech','Verified leader economy'];
+    const OUTCOMES = ['Meeting','Intro','Nurture','Closed','Opportunity'];
+    const GROUP_ACTIONS = ['Join','Monitor','Engage','Deprioritize'];
+    const ACCESS = ['Open','Request','Private'];
+    const RELEVANCE = ['High','Medium','Low'];
+    const ENGVAL = ['High','Medium','Low'];
+    const AUDIENCES = ['Investors','Clergy','Institutions','Partners','Community Builders','Faith Leaders','Advisors'];
+    const USECASES = ['Post','Comment','DM','Follow-up','Connection Request'];
+    const SCRIPT_STATUS = ['Draft','Approved','Used'];
+
+    let sb = null;
+    let currentUser = null;
+    let remoteEnabled = false;
+    let state = loadLocal() || defaultData();
+
+    function defaultData(){ return { targets:[
+      sampleTarget('Alicia Reed','Founder','FaithWorks Labs','Faith + Church Tech','LinkedIn group',5,5,4,4,5,5,'Connected','Active','Sent','2026-06-28','DM','2026-06-29','Faith meets infrastructure','Strong operator with community access','Intro','Sean'),
+      sampleTarget('Marcus Chen','Investor','Covenant Ventures','Faith Investors','Referral',5,4,5,5,5,5,'Requested','Warmed','Replied','2026-06-27','Call','2026-06-30','Financial stewardship and fintech','Capital + network leverage','Opportunity','Sean'),
+      sampleTarget('Dr. Elaine Morris','Ethics Advisor','Institute for Responsible AI','Responsible AI','Comment thread',4,5,4,4,4,4,'Uncontacted','Cold','Not Sent','','Connect','','Ethical AI in spiritual contexts','Strong governance credibility','Nurture','Sean'),
+      sampleTarget('David King','Pastor / Innovation Lead','New Hope Fellowship','Faith + Church Tech','Search',4,5,3,4,4,4,'Requested','Warmed','Sent','2026-06-28','Follow-up','2026-07-01','The future of community','Relevant to care and community systems','Nurture','Sean'),
+      sampleTarget('Priya Patel','Fintech Operator','StewardPay','Fintech','Group',4,3,4,4,5,4,'Connected','Active','Booked','2026-06-28','Call','2026-07-02','Financial stewardship and fintech','Payments / rails / stewardship fit','Meeting','Sean')
+    ], groups:[
+      {name:'Faith Tech Innovators', category:'Faith + Church Tech', size:'3.2K', relevance:'High', access:'Open', admins:'Community leads', value:'High', notes:'Operators and builders', action:'Engage'},
+      {name:'Faith Investors Network', category:'Faith Investors', size:'1.1K', relevance:'High', access:'Request', admins:'Investors', value:'High', notes:'Capital and intros', action:'Join'}
+    ], scripts:[
+      {pillar:'Faith meets infrastructure', audience:'Faith Leaders', hook:'Faith communities do not need more apps.', draft:'Faith communities do not need more apps. They need infrastructure.', cta:'Where is the biggest infrastructure gap?', use:'Post', status:'Draft'},
+      {pillar:'Ethical AI in spiritual contexts', audience:'Investors', hook:'AI should never replace spiritual authority.', draft:'AI should never replace spiritual authority.', cta:'What boundaries should hold?', use:'Post', status:'Draft'}
+    ], weekly:[['Monday','Review targets','Priority list for the week',''],['Tuesday','Authority post','Category-building post',''],['Wednesday','Outreach','DMs and connection follow-ups',''],['Thursday','Trust post','Governance / ethics / community post',''],['Friday','Review','KPI update and next-week planning','']], notes:[] }; }
+    function loadLocal(){ try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; } }
+    function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function sampleTarget(name,title,org,category,source,score,mf,inf,dp,tp,sl,conn,eng,dm,last,next,nextDate,pillar,notes,outcome,owner){ return {name,title,org,category,source,score:+score,mf:+mf,inf:+inf,dp:+dp,tp:+tp,sl:+sl,conn,eng,dm,last,next,nextDate,pillar,notes,outcome,owner}; }
+    function total(t){ return (+t.mf||0)+(+t.inf||0)+(+t.dp||0)+(+t.tp||0)+(+t.sl||0); }
+    function tier(score){ if(score>=22)return 'Tier 1'; if(score>=18)return 'Tier 2'; if(score>=14)return 'Tier 3'; if(score>=10)return 'Tier 4'; return 'Tier 5'; }
+    function esc(v){ return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+    function statusPill(text){ const map={'Booked':'green','Replied':'green','Sent':'yellow','Follow-up':'blue','Connected':'blue','Requested':'gray','Uncontacted':'gray','Opportunity':'green','Meeting':'green','Intro':'blue','Nurture':'gray','Closed':'gray','Active':'green','Warmed':'yellow','High':'green','Medium':'yellow','Low':'gray','Join':'green','Engage':'yellow','Monitor':'blue','Deprioritize':'gray','Open':'green','Request':'yellow','Private':'gray'}; return `<span class="pill ${map[text]||'gray'}">${esc(text)}</span>`; }
+    function activeSection(id){ document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id)); document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id)); }
+    function setSyncUI(mode, detail){ const dot = document.getElementById('syncDot'); const label = document.getElementById('syncLabel'); const det = document.getElementById('syncDetail'); if(mode==='shared'){ dot.className='dot ok'; label.textContent='Shared storage connected'; } else if(mode==='auth'){ dot.className='dot warn'; label.textContent='Signed in, sync pending'; } else { dot.className='dot off'; label.textContent='Local mode'; } det.textContent = detail || ''; }
+
+    async function initSupabase(){
+      if(!hasConfig || !window.supabase){ setSyncUI('local', hasConfig ? 'Supabase library not loaded.' : 'No shared storage configured yet.'); return; }
+      sb = window.supabase.createClient(APP_CONFIG.supabaseUrl, APP_CONFIG.supabaseAnonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+      const { data } = await sb.auth.getUser();
+      currentUser = data?.user || null;
+      updateAuthUI();
+      sb.auth.onAuthStateChange(async (_event, session) => {
+        currentUser = session?.user || null;
+        updateAuthUI();
+        if (currentUser) await loadRemote();
+      });
+      if (currentUser) await loadRemote(); else setSyncUI('auth','Sign in with a magic link to enable shared storage.');
+    }
+
+    function updateAuthUI(){
+      const btn = document.getElementById('btnSignOut');
+      const userLabel = document.getElementById('userLabel');
+      if(currentUser){ btn.classList.remove('hidden'); userLabel.textContent = `Signed in as ${currentUser.email || currentUser.id}. Shared edits will sync automatically.`; setSyncUI('shared','Live sync active for this session.'); }
+      else { btn.classList.add('hidden'); userLabel.textContent = hasConfig ? 'Not signed in. Shared sync is available after magic-link login.' : 'Not signed in. Local mode only.'; if(hasConfig) setSyncUI('auth','Magic-link login required for shared storage.'); }
+    }
+
+    async function loadRemote(){
+      if(!sb || !currentUser) return;
+      try {
+        const { data, error } = await sb.from(APP_CONFIG.tableName).select('payload, updated_at, updated_by').eq('id', APP_CONFIG.rowId).maybeSingle();
+        if(error) throw error;
+        if(data?.payload){
+          const remoteState = data.payload;
+          const localStamp = Number(localStorage.getItem(STORAGE_KEY + '_ts') || '0');
+          const remoteStamp = Date.parse(data.updated_at || '') || 0;
+          if(remoteStamp >= localStamp){ state = normalizeState(remoteState); saveLocal(); localStorage.setItem(STORAGE_KEY + '_ts', String(remoteStamp)); }
+        }
+        renderAll();
+        setSyncUI('shared', `Synced from Supabase${data?.updated_by ? ' · last updated by ' + data.updated_by : ''}.`);
+      } catch(err){ console.warn('remote load failed', err); setSyncUI('auth', 'Shared sync unavailable right now; using local data.'); }
+    }
+
+    function normalizeState(raw){
+      const base = defaultData();
+      return {
+        targets: Array.isArray(raw?.targets) ? raw.targets : base.targets,
+        groups: Array.isArray(raw?.groups) ? raw.groups : base.groups,
+        scripts: Array.isArray(raw?.scripts) ? raw.scripts : base.scripts,
+        weekly: Array.isArray(raw?.weekly) ? raw.weekly : base.weekly,
+        notes: Array.isArray(raw?.notes) ? raw.notes : base.notes
+      };
+    }
+
+    async function saveRemote(){
+      if(!sb || !currentUser) return;
+      try {
+        const payload = normalizeState(state);
+        const { error } = await sb.from(APP_CONFIG.tableName).upsert({ id: APP_CONFIG.rowId, payload, updated_by: currentUser.email || currentUser.id, updated_at: new Date().toISOString() });
+        if(error) throw error;
+        const ts = Date.now();
+        localStorage.setItem(STORAGE_KEY + '_ts', String(ts));
+        setSyncUI('shared', `Saved to Supabase · ${new Date(ts).toLocaleString()}`);
+      } catch(err){ console.warn('remote save failed', err); setSyncUI('auth', 'Saved locally; remote sync failed.'); }
+    }
+
+    function saveAll(){ saveLocal(); renderAll(); saveRemote(); }
+
+    function refreshFilters(){ const cat=document.getElementById('filterCategory'); const stat=document.getElementById('filterStatus'); const catVal=cat.value, statVal=stat.value; cat.innerHTML='<option value="">All Categories</option>'+CATEGORIES.map(c=>`<option>${c}</option>`).join(''); stat.innerHTML='<option value="">All DM Statuses</option>'+DMSTATUS.map(s=>`<option>${s}</option>`).join(''); cat.value=catVal; stat.value=statVal; }
+    function getFilteredTargets(){ const q=document.getElementById('searchTargets').value.trim().toLowerCase(); const cat=document.getElementById('filterCategory').value; const st=document.getElementById('filterStatus').value; return [...state.targets].filter(t=>{ const hay=[t.name,t.title,t.org,t.category,t.source,t.notes,t.pillar,t.outcome,t.owner,t.conn,t.eng,t.dm,t.next,t.nextDate].join(' ').toLowerCase(); return (!q||hay.includes(q)) && (!cat||t.category===cat) && (!st||t.dm===st); }).sort((a,b)=>total(b)-total(a)); }
+    function selectCell(idx,key,val,options,table='targets'){ return `<td><select class="status-select" data-table="${table}" data-idx="${idx}" data-key="${key}">${options.map(o=>`<option ${o===val?'selected':''}>${esc(o)}</option>`).join('')}</select></td>`; }
+    function editableCell(value, idx, key, table='targets'){ return `<td contenteditable="true" data-table="${table}" data-idx="${idx}" data-key="${key}">${esc(value)}</td>`; }
+
+    function renderTargets(){ refreshFilters(); const rows=getFilteredTargets(); const tbody=document.querySelector('#targetsTable tbody'); tbody.innerHTML=rows.map((t,i)=>{ const actualIndex=state.targets.indexOf(t); return `<tr>
+      <td>${i+1}</td>${editableCell(t.name,actualIndex,'name')}${editableCell(t.title,actualIndex,'title')}${editableCell(t.org,actualIndex,'org')}${editableCell(t.category,actualIndex,'category')}${editableCell(t.source,actualIndex,'source')}${editableCell(total(t),actualIndex,'score')}${editableCell(t.mf,actualIndex,'mf')}${editableCell(t.inf,actualIndex,'inf')}${editableCell(t.dp,actualIndex,'dp')}${editableCell(t.tp,actualIndex,'tp')}${editableCell(t.sl,actualIndex,'sl')}<td>${tier(total(t))}</td>${selectCell(actualIndex,'conn',t.conn,CONNECTION)}${selectCell(actualIndex,'eng',t.eng,ENGAGEMENT)}${selectCell(actualIndex,'dm',t.dm,DMSTATUS)}${editableCell(t.last,actualIndex,'last')}${selectCell(actualIndex,'next',t.next,NEXTACTION)}${editableCell(t.nextDate,actualIndex,'nextDate')}${selectCell(actualIndex,'pillar',t.pillar,PILLARS)}${editableCell(t.notes,actualIndex,'notes')}${selectCell(actualIndex,'outcome',t.outcome,OUTCOMES)}${editableCell(t.owner,actualIndex,'owner')}<td><button class="btn danger" data-del-target="${actualIndex}">Delete</button></td>
+    </tr>`; }).join('') || `<tr><td colspan="24" class="muted">No targets match the current filters.</td></tr>`; bindDeleteButtons('targets'); bindCellEdits('targets'); bindSelects('targets'); updateDashboard(); }
+    function renderTop25(){ const top=[...state.targets].sort((a,b)=>total(b)-total(a)).slice(0,25); const tbody=document.querySelector('#top25Table tbody'); tbody.innerHTML=top.map((t,i)=>`<tr><td>${i+1}</td><td>${esc(t.name)}</td><td>${esc(t.category)}</td><td>${total(t)}</td><td>${tier(total(t))}</td><td>${statusPill(t.conn)}</td><td>${statusPill(t.dm)}</td><td>${esc(t.next)}</td><td>${esc(t.nextDate)}</td><td>${esc(t.pillar)}</td><td class="notebox">${esc(t.notes)}</td></tr>`).join('') || `<tr><td colspan="11" class="muted">Add targets to generate Top 25.</td></tr>`; }
+    function renderGroups(){ const tbody=document.querySelector('#groupsTable tbody'); tbody.innerHTML=state.groups.map((g,i)=>`<tr><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="name">${esc(g.name)}</td><td><select data-table="groups" data-idx="${i}" data-key="category">${['',...CATEGORIES].map(x=>`<option ${x===g.category?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="size">${esc(g.size)}</td><td><select data-table="groups" data-idx="${i}" data-key="relevance">${RELEVANCE.map(x=>`<option ${x===g.relevance?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="groups" data-idx="${i}" data-key="access">${ACCESS.map(x=>`<option ${x===g.access?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="admins">${esc(g.admins)}</td><td><select data-table="groups" data-idx="${i}" data-key="value">${ENGVAL.map(x=>`<option ${x===g.value?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="notes">${esc(g.notes)}</td><td><select data-table="groups" data-idx="${i}" data-key="action">${GROUP_ACTIONS.map(x=>`<option ${x===g.action?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><button class="btn danger" data-del-group="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="10" class="muted">No groups yet.</td></tr>`; bindDeleteButtons('groups'); bindCellEdits('groups'); bindSelects('groups'); }
+    function renderScripts(){ const tbody=document.querySelector('#scriptsTable tbody'); tbody.innerHTML=state.scripts.map((s,i)=>`<tr><td><select data-table="scripts" data-idx="${i}" data-key="pillar">${PILLARS.map(x=>`<option ${x===s.pillar?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="audience">${AUDIENCES.map(x=>`<option ${x===s.audience?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="hook">${esc(s.hook)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="draft">${esc(s.draft)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="cta">${esc(s.cta)}</td><td><select data-table="scripts" data-idx="${i}" data-key="use">${USECASES.map(x=>`<option ${x===s.use?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="status">${SCRIPT_STATUS.map(x=>`<option ${x===s.status?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><button class="btn danger" data-del-script="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="8" class="muted">No scripts yet.</td></tr>`; bindDeleteButtons('scripts'); bindCellEdits('scripts'); bindSelects('scripts'); }
+    function renderWeekly(){ const tbody=document.querySelector('#weeklyTable tbody'); tbody.innerHTML=state.weekly.map((w,i)=>`<tr><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="0">${esc(w[0])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="1">${esc(w[1])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="2">${esc(w[2])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="3">${esc(w[3])}</td></tr>`).join(''); bindCellEdits('weekly'); }
+    function updateDashboard(){ const rows=state.targets; document.getElementById('mTotalTargets').textContent=rows.length; document.getElementById('mTopPriority').textContent=rows.filter(t=>total(t)>=20).length; document.getElementById('mReplies').textContent=rows.filter(t=>t.dm==='Replied').length; document.getElementById('mMeetings').textContent=rows.filter(t=>t.dm==='Booked').length; document.getElementById('mUncontacted').textContent=rows.filter(t=>t.conn==='Uncontacted').length; document.getElementById('mConnected').textContent=rows.filter(t=>t.conn==='Connected').length; document.getElementById('mDmSent').textContent=rows.filter(t=>t.dm==='Sent').length; document.getElementById('mInConversation').textContent=rows.filter(t=>t.dm==='Follow-up'||t.dm==='Replied').length; const pipe=['Uncontacted','Requested','Connected','Not Sent','Sent','Replied','Follow-up','Booked']; document.getElementById('pipelineTable').innerHTML=pipe.map(s=>`<tr><td>${esc(s)}</td><td>${rows.filter(t=>[t.conn,t.dm].includes(s)).length}</td></tr>`).join(''); document.getElementById('categoryTable').innerHTML=CATEGORIES.map(c=>`<tr><td>${esc(c)}</td><td>${rows.filter(t=>t.category===c).length}</td></tr>`).join(''); }
+    function bindCellEdits(table){ document.querySelectorAll(`[data-table="${table}"][contenteditable="true"]`).forEach(el=>{ el.onblur=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; const text=el.textContent.trim(); if(table==='weekly') state.weekly[idx][key]=text; else if(table==='targets'){ const t=state.targets[idx]; if(['score','mf','inf','dp','tp','sl'].includes(key)) t[key]=Number(text)||0; else t[key]=text; } else if(table==='groups') state.groups[idx][key]=text; else if(table==='scripts') state.scripts[idx][key]=text; saveAll(); }; }); }
+    function bindSelects(table){ document.querySelectorAll(`[data-table="${table}"] select`).forEach(el=>{ el.onchange=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; if(table==='targets') state.targets[idx][key]=el.value; if(table==='groups') state.groups[idx][key]=el.value; if(table==='scripts') state.scripts[idx][key]=el.value; saveAll(); }; }); }
+    function bindDeleteButtons(kind){ if(kind==='targets') document.querySelectorAll('[data-del-target]').forEach(btn=>btn.onclick=()=>{ state.targets.splice(+btn.dataset.delTarget,1); saveAll(); }); if(kind==='groups') document.querySelectorAll('[data-del-group]').forEach(btn=>btn.onclick=()=>{ state.groups.splice(+btn.dataset.delGroup,1); saveAll(); }); if(kind==='scripts') document.querySelectorAll('[data-del-script]').forEach(btn=>btn.onclick=()=>{ state.scripts.splice(+btn.dataset.delScript,1); saveAll(); }); }
+    function addTarget(){ state.targets.unshift({name:'',title:'',org:'',category:'Faith + Church Tech',source:'',score:0,mf:0,inf:0,dp:0,tp:0,sl:0,conn:'Uncontacted',eng:'Cold',dm:'Not Sent',last:'',next:'Connect',nextDate:'',pillar:'Faith meets infrastructure',notes:'',outcome:'Nurture',owner:'Sean'}); saveAll(); activeSection('targets'); }
+    function addGroup(){ state.groups.push({name:'',category:'Faith + Church Tech',size:'',relevance:'High',access:'Open',admins:'',value:'High',notes:'',action:'Engage'}); saveAll(); activeSection('groups'); }
+    function addScript(){ state.scripts.push({pillar:'Faith meets infrastructure',audience:'Faith Leaders',hook:'',draft:'',cta:'',use:'Post',status:'Draft'}); saveAll(); activeSection('scripts'); }
+    function resetWeek(){ state.weekly = defaultData().weekly; saveAll(); activeSection('weekly'); }
+    function renderAll(){ renderTargets(); renderTop25(); renderGroups(); renderScripts(); renderWeekly(); updateDashboard(); }
+    function syncDerivedScores(){ state.targets.forEach(t=>{ t.score=total(t); }); }
+
+    async function sendMagicLink(){ if(!sb) return alert('Shared storage is not configured yet.'); const email=document.getElementById('emailInput').value.trim(); if(!email) return alert('Enter an email address.'); const redirectTo = window.location.origin + window.location.pathname; const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: redirectTo } }); if(error) return alert(error.message); alert('Magic link sent. Check email to sign in.'); }
+    async function signOut(){ if(!sb) return; await sb.auth.signOut(); currentUser=null; updateAuthUI(); }
+    async function syncNow(){ saveLocal(); if(currentUser) await saveRemote(); else setSyncUI(hasConfig ? 'auth' : 'local', hasConfig ? 'Sign in to sync to Supabase.' : 'No shared storage configured yet.'); }
+
+    document.getElementById('navTabs').addEventListener('click', e=>{ const tab=e.target.closest('.tab'); if(!tab) return; activeSection(tab.dataset.tab); });
+    document.getElementById('btnAddTarget').onclick=addTarget; document.getElementById('btnAddGroup').onclick=addGroup; document.getElementById('btnAddGroup2').onclick=addGroup; document.getElementById('btnAddScript').onclick=addScript; document.getElementById('btnAddScript2').onclick=addScript; document.getElementById('btnLoadWeek').onclick=resetWeek; document.getElementById('btnFocusTop25').onclick=()=>{ renderTop25(); activeSection('top25'); };
+    document.getElementById('btnSeed').onclick=()=>{ state = defaultData(); saveAll(); };
+    document.getElementById('btnClear').onclick=()=>{ if(confirm('Clear all dashboard data from this browser?')){ localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(STORAGE_KEY+'_ts'); state = defaultData(); state.targets=[]; state.groups=[]; state.scripts=[]; state.weekly = defaultData().weekly; saveAll(); } };
+    document.getElementById('btnExport').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='vws-linkedin-dashboard-data.json'; a.click(); URL.revokeObjectURL(a.href); };
+    document.getElementById('importFile').addEventListener('change', async e=>{ const file=e.target.files?.[0]; if(!file) return; try{ state=normalizeState(JSON.parse(await file.text())); saveAll(); } catch { alert('Invalid JSON file'); } e.target.value=''; });
+    document.getElementById('searchTargets').oninput=renderTargets; document.getElementById('filterCategory').onchange=renderTargets; document.getElementById('filterStatus').onchange=renderTargets; document.getElementById('btnResetFilters').onclick=()=>{ document.getElementById('searchTargets').value=''; document.getElementById('filterCategory').value=''; document.getElementById('filterStatus').value=''; renderTargets(); };
+    document.getElementById('btnMagicLink').onclick=sendMagicLink; document.getElementById('btnSignOut').onclick=signOut; document.getElementById('btnSyncNow').onclick=syncNow;
+    function renderFilters(){ const cat=document.getElementById('filterCategory'); const stat=document.getElementById('filterStatus'); const cval=cat.value, sval=stat.value; cat.innerHTML='<option value="">All Categories</option>'+CATEGORIES.map(c=>`<option>${c}</option>`).join(''); stat.innerHTML='<option value="">All DM Statuses</option>'+DMSTATUS.map(s=>`<option>${s}</option>`).join(''); cat.value=cval; stat.value=sval; }
+    async function boot(){ syncDerivedScores(); renderAll(); renderFilters(); saveLocal(); if(hasConfig && window.supabase){ await initSupabase(); if(currentUser) await loadRemote(); } else setSyncUI('local','No shared storage configured yet. Add Supabase URL and anon key in config.js to enable sync.'); }
+    boot();
+  </script>
+</body>
+</html>
