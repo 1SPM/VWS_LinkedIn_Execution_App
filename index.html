@@ -218,7 +218,7 @@
     const ENGVAL = ['High','Medium','Low'];
     const AUDIENCES = ['Investors','Trusted Leaders','Institutions','Partners','Community Builders','Values-Based Leaders','Advisors'];
     const USECASES = ['LinkedIn Post','Substack Article','YouTube Tie-In','Post','Comment','DM','Follow-up','Connection Request'];
-    const SCRIPT_STATUS = ['Draft','Approved','Used'];
+    const SCRIPT_STATUS = ['Draft','Ready for Approval','Approved','Used'];
     const STEP_STATUS = ['Pending','In Progress','Blocked','Done'];
     const STEP_TYPES = ['Marketing','Investment Outreach'];
 
@@ -237,6 +237,332 @@
       {name:'Community Tech Innovators', category:'Community + Institution Tech', size:'3.2K', relevance:'High', access:'Open', admins:'Community leads', value:'High', notes:'Operators and builders', action:'Engage'},
       {name:'Values-Aligned Capital Network', category:'Values-Aligned Capital', size:'1.1K', relevance:'High', access:'Request', admins:'Investors', value:'High', notes:'Capital and intros', action:'Join'}
     ], scripts:[
+      {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Institutions', hook:'The awkward question layer: what we noticed when AI made belief easier to approach', draft:`# The awkward question layer: what we noticed when AI made belief easier to approach
+
+### Field notes from building AI systems in high-trust human environments.
+
+Video referenced:
+Can AI Experience God? What We Discovered
+Divinity | Voices of AGI
+https://www.youtube.com/watch?v=6PxNxzrQysk
+
+There is a specific kind of question people avoid asking in public.
+
+Not because the question is hostile.
+
+Usually it is the opposite. The person is curious. They want to understand. They have heard something somewhere, half-remembered it, absorbed a stereotype, or bumped into a tradition they do not know how to approach.
+
+But the question feels awkward.
+
+It feels too basic. Too loaded. Too likely to offend someone. Too easy to phrase badly.
+
+In one of our DivinityAGI tests, that became the interesting part.
+
+The video begins with a large question: can artificial intelligence create something that feels spiritually meaningful?
+
+But the more useful discovery was smaller.
+
+The user was not trying to become an expert. He was not looking for a final answer to life. He was trying to ask questions about a tradition he did not fully understand.
+
+He asked about Mormonism. He asked about the Church of Jesus Christ of Latter-day Saints. He asked about scripture, doctrine, Joseph Smith, the Pearl of Great Price, continuing revelation, and even the thing many people have heard in passing but do not know how to ask about: the idea of inheriting or ruling over worlds.
+
+That is a strange question to ask another person if you are not already inside that tradition.
+
+It is the kind of question that can come out wrong even when the intent is honest.
+
+With an AI character, the friction dropped.
+
+That is what caught our attention.
+
+## The first version of the experiment was too broad
+
+When we started building DivinityAGI, the question was much bigger and much less precise.
+
+What if people could talk to representations of different spiritual traditions?
+
+What if AI could help explain beliefs, practices, and worldviews?
+
+What if someone could privately explore ideas they might never walk into a room and ask about?
+
+Those were useful questions, but they were still broad.
+
+Over time, the sharper research question became more practical:
+
+Can AI help people ask the first question?
+
+Not the deepest question.
+
+Not the final question.
+
+The first one.
+
+The clumsy one.
+
+The one that opens the door.
+
+That may sound small, but in high-trust environments, the first question matters. It determines whether someone feels invited, embarrassed, judged, corrected, dismissed, or curious enough to keep going.
+
+A lot of technology tries to optimize for answers.
+
+We are learning that, in sensitive spaces, the better design problem may be helping people form safer questions.
+
+## What happened in the conversation
+
+The user begins with uncertainty. He admits he does not know much about the tradition. He also admits he has heard things.
+
+That admission matters.
+
+Most people do not come to unfamiliar worldviews as blank slates. They come with fragments. A joke they heard. A documentary. A conversation from years ago. A cultural stereotype. A headline. A family assumption.
+
+The AI character responds with formal explanations. It gives a basic history of Mormonism. It explains additional scriptures. It describes the Book of Mormon, Doctrine and Covenants, Pearl of Great Price, modern prophets, continuing revelation, and some of the distinctive theological ideas associated with the tradition.
+
+The interaction is not perfect. That is important to say.
+
+It is a model producing responses inside a designed environment. It is not a human leader. It does not carry lived authority. It does not know what it means to belong to that community. It can miss nuance. It can sound more confident than it should.
+
+But something real still happened.
+
+The user learned enough to become more curious.
+
+Not converted. Not convinced. Not spiritually transformed.
+
+Curious.
+
+That is a meaningful outcome.
+
+Curiosity is often the first sign that a system has reduced fear without pretending to settle the matter.
+
+## The awkward question is a design category
+
+We have started thinking about this as its own layer.
+
+The awkward question layer.
+
+This is the space between ignorance and relationship.
+
+It is where someone is not ready to approach a leader, community, institution, or expert yet. They are still trying to figure out what they are even asking.
+
+In many sensitive domains, that layer already exists.
+
+In healthcare, people search symptoms before calling a doctor.
+
+In legal situations, people read online before contacting an attorney.
+
+In mental health, people often test language privately before saying it to someone else.
+
+In spiritual or values-based contexts, the same thing happens. People wonder privately before they ask publicly.
+
+The problem is that most private searching is messy. Search engines flatten everything into links. Forums can be hostile. Short-form content rewards outrage. Even well-written explainers can feel impersonal.
+
+A conversational AI changes the shape of that first layer.
+
+It lets someone ask the question in their own words, even if those words are incomplete.
+
+That is powerful.
+
+It is also dangerous if handled carelessly.
+
+## Smoothness is not the same as understanding
+
+One of the things we noticed in this test is how quickly a smooth answer creates trust.
+
+The system did not hesitate. It did not shame the user. It did not make the question feel foolish. It responded in a clear, organized way.
+
+That made the experience feel safe.
+
+But this is where our approach had to mature.
+
+In the early framing, it was tempting to focus on the magic of the interaction. Look at what the AI can explain. Look at how comfortable the user feels. Look at how much ground the conversation covers.
+
+That is still interesting, but it is incomplete.
+
+The deeper issue is that smoothness can disguise the difference between explanation and authority.
+
+A model can explain a belief.
+
+That does not mean it represents the belief.
+
+A model can summarize doctrine.
+
+That does not mean it understands the life of a community.
+
+A model can answer an awkward question.
+
+That does not mean it should become the place where the person stops searching.
+
+This is where we improved the way we think about DivinityAGI.
+
+The goal cannot be to make the AI sound more spiritually impressive.
+
+The goal has to be to make the system more honest about what kind of help it is providing.
+
+Sometimes the right outcome is not a complete answer.
+
+Sometimes the right outcome is:
+
+Here is a basic explanation.
+
+Here is where interpretations vary.
+
+Here is what I cannot fully represent.
+
+Here is why a human leader or community member would be the better next step.
+
+That may be less dazzling.
+
+It is also more responsible.
+
+## What the user was really testing
+
+The user was not only testing the system's knowledge.
+
+He was testing whether the interaction could hold curiosity without punishment.
+
+That is a different kind of test.
+
+When he asked about unfamiliar doctrine, he was also asking:
+
+Can I say this here?
+
+Can I admit I do not know?
+
+Can I ask the thing I heard without being judged?
+
+Can I explore without committing?
+
+Can I be surprised without being pressured?
+
+Those questions sit underneath the visible questions.
+
+This is why AI in high-trust environments cannot be evaluated only by factual accuracy. Accuracy matters, of course. But it is not enough.
+
+The system also has to manage emotional conditions.
+
+Does it make the user more curious or more dependent?
+
+Does it invite humility or create false confidence?
+
+Does it widen the path toward human understanding or replace it with a synthetic substitute?
+
+Those are the questions we are now more interested in.
+
+## The possibility we are seeing
+
+There is a responsible version of this.
+
+I do not think it looks like an AI guru.
+
+I do not think it looks like a replacement for teachers, clergy, elders, mentors, counselors, or community leaders.
+
+It looks more like a first conversation layer.
+
+A private place to begin.
+
+A way to help someone move from vague assumption to better questions.
+
+A way to let people encounter traditions, values, and ideas without immediately feeling exposed.
+
+If designed well, that layer could reduce ignorance. It could reduce fear. It could help people approach real communities with more respect because they have already done some private orientation.
+
+That is the possibility.
+
+But the design has to be careful.
+
+The system should not behave as if it owns the truth. It should not pretend all traditions are interchangeable. It should not reduce living communities to neatly packaged summaries. It should not turn sacred or identity-forming material into generic wellness content.
+
+It should help the user approach complexity, not escape it.
+
+## Why this matters beyond this one video
+
+The video happens to focus on a religious tradition.
+
+But the pattern is larger.
+
+People have awkward questions about everything that matters.
+
+They have awkward questions about grief.
+
+About money.
+
+About family conflict.
+
+About identity.
+
+About aging parents.
+
+About belonging.
+
+About purpose.
+
+About institutions they no longer trust but still need.
+
+These are not simple productivity problems. They are high-trust human problems.
+
+And AI is going to enter them whether we are ready or not.
+
+That is why this R&D matters.
+
+DivinityAGI lets us observe how people behave when the topic is sensitive and the interface feels safe. It gives us a way to see the moments where AI helps, the moments where it overreaches, and the moments where human leadership needs to be brought back into view.
+
+The product lesson is not "AI can answer spiritual questions."
+
+That is too shallow.
+
+The better lesson is that AI can reveal the questions people were already carrying.
+
+Once we see those questions, we can design better infrastructure around them.
+
+## What we are changing as builders
+
+This is where our own approach has shifted.
+
+Earlier, the temptation was to ask whether the AI experience could feel profound.
+
+Now we are asking whether it can remain appropriately limited.
+
+Can it be useful without becoming authoritative?
+
+Can it be warm without pretending to care?
+
+Can it explain without flattening?
+
+Can it encourage curiosity without steering the user into dependence?
+
+Can it make room for human leaders instead of quietly replacing them?
+
+Those are harder questions, but they are better ones.
+
+They move us away from spectacle and toward infrastructure.
+
+And that is where the work needs to go.
+
+## The thing I keep coming back to
+
+The most interesting part of the video is not whether the AI gave perfect answers.
+
+It did not need to.
+
+The interesting part is that the user kept asking.
+
+He stayed in the conversation. He admitted surprise. He learned something he did not know. He became more curious than he was at the beginning.
+
+That is worth paying attention to.
+
+Not because it proves that AI belongs at the center of human meaning.
+
+It does not.
+
+It shows that AI may have a role at the edge of discovery, where people are still gathering the courage and language to approach something unfamiliar.
+
+That edge is delicate.
+
+If we build for engagement, we will probably exploit it.
+
+If we build for trust, we might protect it.
+
+That is the difference.
+
+DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for Substack, then repurpose into a LinkedIn authority post.', use:'Substack Article', status:'Ready for Approval'},
       {pillar:'Community meets infrastructure', audience:'Values-Based Leaders', hook:'Trusted communities do not need more apps.', draft:'Trusted communities do not need more apps. They need infrastructure that strengthens care, belonging, stewardship, and human leadership.', cta:'Where is the biggest infrastructure gap?', use:'LinkedIn Post', status:'Draft'},
       {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Investors', hook:'AI should never replace human authority.', draft:'AI should never replace human authority in contexts where trust, care, identity, and belonging matter. Governance is not a legal appendix. It is part of the product.', cta:'What boundaries should hold?', use:'LinkedIn Post', status:'Draft'},
       {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Institutions', hook:'Field notes from building AI systems in high-trust human environments.', draft:'Substack brief: Use Sean’s field-notes voice to explain one hard trust problem, why it matters for communities and institutions, what responsible AI must not replace, and what VWS is learning as infrastructure is built for high-trust environments.', cta:'Subscribe for field notes on trust-first AI infrastructure.', use:'Substack Article', status:'Draft'},
