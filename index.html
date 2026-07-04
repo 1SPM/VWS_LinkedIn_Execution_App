@@ -1274,9 +1274,9 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
       const cp=document.getElementById('previewCopy'); if(cp) cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(document.getElementById('previewBody').innerText); cp.textContent='Copied!'; setTimeout(()=>cp.textContent='Copy to clipboard',1500); }catch(_){ } };
     }
     async function boot(){ syncDerivedScores(); renderAll(); wireAdvancedUI(); renderFilters(); saveLocal(); if(hasConfig && window.supabase){ await initSupabase(); if(currentUser) await loadRemote(); } else setSyncUI('local','No shared storage configured yet. Add Supabase URL and anon key in config.js to enable sync.'); }
-    boot();
+      if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
   </script>
-  <div class="modal-overlay" id="previewModal" hidden>
+    <div class="modal-overlay" id="previewModal" hidden>
     <div class="modal-card">
       <button class="modal-close" id="previewClose" aria-label="Close">×</button>
       <article class="preview-body" id="previewBody"></article>
