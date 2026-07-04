@@ -51,6 +51,33 @@
     .preview .n{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.preview .v{font-size:22px;font-weight:800;margin-top:5px}
     .statusbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}.dot{width:10px;height:10px;border-radius:50%}.dot.ok{background:var(--accent2)}.dot.warn{background:var(--warn)}.dot.off{background:#6f7d9b}
     .syncbox{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+  
+    /* --- Stage 1: Advanced menu --- */
+    .advanced-wrap{position:relative;display:inline-block}
+    .advanced-menu{position:absolute;right:0;top:110%;background:#131722;border:1px solid #2a3142;border-radius:10px;padding:6px;min-width:190px;z-index:40;display:flex;flex-direction:column;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    .advanced-menu[hidden]{display:none}
+    .advanced-menu .btn,.advanced-menu .menu-file{text-align:left;width:100%}
+    /* --- Stage 3: status colour language --- */
+    select.status-select{border-radius:999px;padding:2px 10px;border:1px solid transparent}
+    select.status-select.green {background:rgba(61,220,151,.12);color:#bff9de}
+    select.status-select.yellow{background:rgba(255,209,102,.12);color:#ffe6aa}
+    select.status-select.blue  {background:rgba(106,167,255,.12);color:#cae0ff}
+    select.status-select.gray  {background:rgba(127,140,168,.12);color:#dbe3f6}
+    select.status-select.hot   {background:rgba(255,107,107,.12);color:#ffd0d0}
+    tr.stale-row td{background:rgba(255,107,107,.06)}
+    tr.stale-row td:first-child{box-shadow:inset 3px 0 0 #ff6b6b}
+    input.cell-date{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:6px;padding:3px 6px;font:inherit}
+    /* --- Stage 4: preview modal --- */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:60}
+    .modal-overlay[hidden]{display:none}
+    .modal-card{background:#131722;border:1px solid #2a3142;border-radius:12px;max-width:660px;width:92%;max-height:82vh;overflow:auto;padding:28px;position:relative}
+    .modal-close{position:absolute;top:10px;right:14px;background:none;border:none;color:#9aa4bd;font-size:22px;cursor:pointer}
+    .preview-body{color:#e8ecf5;line-height:1.6}
+    .preview-body h2{margin:0 0 4px;font-size:20px}
+    .preview-body .byline{color:#9aa4bd;font-size:13px;margin-bottom:16px}
+    .preview-body .body-text{white-space:pre-wrap;margin-bottom:16px}
+    .preview-body .cta{font-weight:600;color:#bff9de}
+    .btn-copy{margin-top:18px}
   </style>
 </head>
 <body>
@@ -61,19 +88,20 @@
           <h1>VWS / Divinity LinkedIn Execution App</h1>
           <p>Interactive browser dashboard for targets, Top 25 ranking, groups, posts, DMs, weekly execution, and KPI review. Supports shared storage via Supabase when configured.</p>
         </div>
-        <div class="row">
-          <button class="btn primary" id="btnSeed">Load Sample Data</button>
-          <button class="btn" id="btnExport">Export JSON</button>
-          <label class="btn" for="importFile" style="cursor:pointer;">Import JSON</label>
-          <input id="importFile" type="file" accept="application/json" class="hidden" />
-          <button class="btn danger" id="btnClear">Clear All</button>
-        </div>
-      </div>
-      <div class="toolbar">
+        <div class="toolbar">
         <button class="btn good" id="btnAddTarget">+ Add Target</button>
         <button class="btn" id="btnAddGroup">+ Add Group</button>
         <button class="btn" id="btnAddScript">+ Add Script</button>
         <button class="btn warn" id="btnSyncNow">Sync Now</button>
+        <div class="advanced-wrap">
+          <button class="btn" id="btnAdvanced" aria-haspopup="true" aria-expanded="false">⋯ Advanced</button>
+          <div class="advanced-menu" id="advancedMenu" hidden>
+            <button class="btn primary" id="btnSeed">Load Sample Data</button>
+            <button class="btn" id="btnExport">Export JSON</button>
+            <label class="btn menu-file">Import JSON<input class="hidden" id="importFile" type="file"></label>
+            <button class="btn danger" id="btnClear">Clear All</button>
+          </div>
+        </div>
       </div>
       <div class="syncbox">
         <div class="row" style="justify-content:space-between">
@@ -183,7 +211,7 @@
 
     <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2><div class="small">Track groups, relevance, and action.</div></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Group Name</th><th>Category</th><th>Size</th><th>Relevance</th><th>Access Level</th><th>Admins / Influencers</th><th>Engagement Value</th><th>Notes</th><th>Action</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
-    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Posts + DM Scripts</h2><div class="small">Store Substack article briefs, LinkedIn posts, YouTube tie-ins, hooks, CTAs, and DM scripts here.</div></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Hook</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Posts + DM Scripts</h2><div class="small">Store Substack article briefs, LinkedIn posts, YouTube tie-ins, hooks, CTAs, and DM scripts here.</div></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Hook (summary)</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th>Created</th><th>Publish-Ready</th><th>Preview</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
     <section id="weekly" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Weekly Plan</h2><div class="small">Use this to keep the system moving.</div></div><button class="btn" id="btnLoadWeek">Reset Week Template</button></div><div class="table-wrap"><table id="weeklyTable" style="min-width:0"><thead><tr><th>Day</th><th>Focus</th><th>Output</th><th>Completed</th></tr></thead><tbody></tbody></table></div></div></section>
 
@@ -591,7 +619,7 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for S
       if(!raw || typeof raw !== 'object') return raw;
       if(Array.isArray(raw.targets)) raw.targets = raw.targets.map(t=>({ ...t, category:migrateLabel(t.category), pillar:migrateLabel(t.pillar), title:migrateLabel(t.title), owner:t.owner || 'Clarence' }));
       if(Array.isArray(raw.groups)) raw.groups = raw.groups.map(g=>({ ...g, category:migrateLabel(g.category), name:migrateLabel(g.name) }));
-      if(Array.isArray(raw.scripts)) raw.scripts = raw.scripts.map(s=>({ ...s, pillar:migrateLabel(s.pillar), audience:migrateLabel(s.audience), hook:String(s.hook||'').replace('Faith communities','Trusted communities'), draft:String(s.draft||'').replaceAll('Faith communities','Trusted communities').replaceAll('spiritual authority','human authority') }));
+      if(Array.isArray(raw.scripts)) raw.scripts = raw.scripts.map(s=>({ ...s, pillar:migrateLabel(s.pillar), audience:migrateLabel(s.audience), hook:String(s.hook||'').replace('Faith communities','Trusted communities'), draft:String(s.draft||'').replaceAll('Faith communities','Trusted communities').replaceAll('spiritual authority','human authority'), createdDate:s.createdDate||todayISO(), publishReadyDate:('publishReadyDate' in s)?s.publishReadyDate:'', owner:s.owner||'Clarence' }));
       return raw;
     }
     function loadLocal(){ try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? migrateState(JSON.parse(raw)) : null; } catch { return null; } }
@@ -600,6 +628,18 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for S
     function total(t){ return (+t.mf||0)+(+t.inf||0)+(+t.dp||0)+(+t.tp||0)+(+t.sl||0); }
     function tier(score){ if(score>=22)return 'Tier 1'; if(score>=18)return 'Tier 2'; if(score>=14)return 'Tier 3'; if(score>=10)return 'Tier 4'; return 'Tier 5'; }
     function esc(v){ return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+    // --- Stage 2/3 helpers ---
+    function todayISO(){ return new Date().toISOString().slice(0,10); }
+    function statusColorClass(status){
+      const m = {'Draft':'gray','Ready for Approval':'yellow','Approved':'green','Used':'blue',
+                 'Pending':'gray','In Progress':'yellow','Blocked':'hot','Done':'green'};
+      return m[status] || 'gray';
+    }
+    const STALE_DAYS = 7;
+    function isStaleScript(s){
+      if(s.status !== 'Draft' || !s.createdDate) return false;
+      return (Date.now() - new Date(s.createdDate).getTime())/86400000 > STALE_DAYS;
+    }
     function statusPill(text){ const map={'Booked':'green','Replied':'green','Sent':'yellow','Follow-up':'blue','Connected':'blue','Requested':'gray','Uncontacted':'gray','Opportunity':'green','Meeting':'green','Intro':'blue','Nurture':'gray','Closed':'gray','Active':'green','Warmed':'yellow','High':'green','Medium':'yellow','Low':'gray','Join':'green','Engage':'yellow','Monitor':'blue','Deprioritize':'gray','Open':'green','Request':'yellow','Private':'gray'}; return `<span class="pill ${map[text]||'gray'}">${esc(text)}</span>`; }
     function activeSection(id){ document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id)); document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id)); }
     function setSyncUI(mode, detail){ const dot = document.getElementById('syncDot'); const label = document.getElementById('syncLabel'); const det = document.getElementById('syncDetail'); if(mode==='shared'){ dot.className='dot ok'; label.textContent='Shared storage connected'; } else if(mode==='auth'){ dot.className='dot warn'; label.textContent='Signed in, sync pending'; } else { dot.className='dot off'; label.textContent='Local mode'; } det.textContent = detail || ''; }
@@ -694,16 +734,16 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for S
     </tr>`; }).join('') || `<tr><td colspan="25" class="muted">No targets match the current filters.</td></tr>`; bindDeleteButtons('targets'); bindCellEdits('targets'); bindSelects('targets'); updateDashboard(); }
     function renderTop25(){ const top=[...state.targets].sort((a,b)=>total(b)-total(a)).slice(0,25); const tbody=document.querySelector('#top25Table tbody'); tbody.innerHTML=top.map((t,i)=>`<tr><td>${i+1}</td><td>${esc(ownerForTarget(t))}</td><td>${esc(workstreamForOwner(ownerForTarget(t)))}</td><td>${esc(t.name)}</td><td>${esc(t.category)}</td><td>${total(t)}</td><td>${tier(total(t))}</td><td>${statusPill(t.conn)}</td><td>${statusPill(t.dm)}</td><td>${esc(t.next)}</td><td>${esc(t.nextDate)}</td><td>${esc(t.pillar)}</td><td class="notebox">${esc(t.notes)}</td></tr>`).join('') || `<tr><td colspan="13" class="muted">Add targets to generate Top 25.</td></tr>`; }
     function renderGroups(){ const tbody=document.querySelector('#groupsTable tbody'); tbody.innerHTML=state.groups.map((g,i)=>`<tr><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="name">${esc(g.name)}</td><td><select data-table="groups" data-idx="${i}" data-key="category">${['',...CATEGORIES].map(x=>`<option ${x===g.category?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="size">${esc(g.size)}</td><td><select data-table="groups" data-idx="${i}" data-key="relevance">${RELEVANCE.map(x=>`<option ${x===g.relevance?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="groups" data-idx="${i}" data-key="access">${ACCESS.map(x=>`<option ${x===g.access?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="admins">${esc(g.admins)}</td><td><select data-table="groups" data-idx="${i}" data-key="value">${ENGVAL.map(x=>`<option ${x===g.value?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="notes">${esc(g.notes)}</td><td><select data-table="groups" data-idx="${i}" data-key="action">${GROUP_ACTIONS.map(x=>`<option ${x===g.action?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><button class="btn danger" data-del-group="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="10" class="muted">No groups yet.</td></tr>`; bindDeleteButtons('groups'); bindCellEdits('groups'); bindSelects('groups'); }
-    function renderScripts(){ const tbody=document.querySelector('#scriptsTable tbody'); tbody.innerHTML=state.scripts.map((s,i)=>`<tr><td><select data-table="scripts" data-idx="${i}" data-key="pillar">${PILLARS.map(x=>`<option ${x===s.pillar?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="audience">${AUDIENCES.map(x=>`<option ${x===s.audience?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="hook">${esc(s.hook)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="draft">${esc(s.draft)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="cta">${esc(s.cta)}</td><td><select data-table="scripts" data-idx="${i}" data-key="use">${USECASES.map(x=>`<option ${x===s.use?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="status">${SCRIPT_STATUS.map(x=>`<option ${x===s.status?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><button class="btn danger" data-del-script="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="8" class="muted">No scripts yet.</td></tr>`; bindDeleteButtons('scripts'); bindCellEdits('scripts'); bindSelects('scripts'); }
+    function renderScripts(){ const tbody=document.querySelector('#scriptsTable tbody'); tbody.innerHTML=state.scripts.map((s,i)=>`<tr class="${isStaleScript(s)?'stale-row':''}"><td><select data-table="scripts" data-idx="${i}" data-key="pillar">${PILLARS.map(x=>`<option ${x===s.pillar?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="audience">${AUDIENCES.map(x=>`<option ${x===s.audience?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="hook">${esc(s.hook)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="draft">${esc(s.draft)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="cta">${esc(s.cta)}</td><td><select data-table="scripts" data-idx="${i}" data-key="use">${USECASES.map(x=>`<option ${x===s.use?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select class="status-select ${statusColorClass(s.status)}" data-table="scripts" data-idx="${i}" data-key="status">${SCRIPT_STATUS.map(x=>`<option ${x===s.status?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><input type="date" class="cell-date" data-idx="${i}" data-key="createdDate" value="${s.createdDate||''}"></td><td><input type="date" class="cell-date" data-idx="${i}" data-key="publishReadyDate" value="${s.publishReadyDate||''}"></td><td><button class="btn" data-preview-idx="${i}">Preview</button></td><td><button class="btn danger" data-del-script="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="8" class="muted">No scripts yet.</td></tr>`; bindDeleteButtons('scripts'); bindCellEdits('scripts'); bindSelects('scripts'); bindScriptDates(); bindPreviewButtons(); }
     function renderWeekly(){ const tbody=document.querySelector('#weeklyTable tbody'); tbody.innerHTML=state.weekly.map((w,i)=>`<tr><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="0">${esc(w[0])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="1">${esc(w[1])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="2">${esc(w[2])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="3">${esc(w[3])}</td></tr>`).join(''); bindCellEdits('weekly'); }
     function renderWorksteps(){ const tbody=document.querySelector('#workstepsTable tbody'); if(!tbody) return; tbody.innerHTML=(state.worksteps||[]).map((w,i)=>`<tr><td><select data-table="worksteps" data-idx="${i}" data-key="0">${OWNERS.map(x=>`<option ${x===w[0]?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td>${esc(workstreamForOwner(w[0]))}</td><td contenteditable="true" data-table="worksteps" data-idx="${i}" data-key="2">${esc(w[2])}</td><td><select data-table="worksteps" data-idx="${i}" data-key="3">${STEP_STATUS.map(x=>`<option ${x===w[3]?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="worksteps" data-idx="${i}" data-key="4">${esc(w[4])}</td><td contenteditable="true" data-table="worksteps" data-idx="${i}" data-key="5">${esc(w[5])}</td></tr>`).join(''); bindCellEdits('worksteps'); bindSelects('worksteps'); }
     function updateDashboard(){ const rows=state.targets; document.getElementById('mTotalTargets').textContent=rows.length; document.getElementById('mTopPriority').textContent=rows.filter(t=>total(t)>=20).length; document.getElementById('mReplies').textContent=rows.filter(t=>t.dm==='Replied').length; document.getElementById('mMeetings').textContent=rows.filter(t=>t.dm==='Booked').length; document.getElementById('mClarence').textContent=getOwnerTargets('Clarence').length; document.getElementById('mmarci-ir').textContent=getOwnerTargets('marci-ir').length; document.getElementById('mUncontacted').textContent=rows.filter(t=>t.conn==='Uncontacted').length; document.getElementById('mInConversation').textContent=rows.filter(t=>t.dm==='Follow-up'||t.dm==='Replied').length; const pipe=['Uncontacted','Requested','Connected','Not Sent','Sent','Replied','Follow-up','Booked']; document.getElementById('pipelineTable').innerHTML=pipe.map(s=>`<tr><td>${esc(s)}</td><td>${rows.filter(t=>[t.conn,t.dm].includes(s)).length}</td></tr>`).join(''); document.getElementById('categoryTable').innerHTML=CATEGORIES.map(c=>`<tr><td>${esc(c)}</td><td>${rows.filter(t=>t.category===c).length}</td></tr>`).join(''); if(document.getElementById('wClarenceTargets')) { document.getElementById('wClarenceTargets').textContent=getOwnerTargets('Clarence').length; document.getElementById('wClarenceActive').textContent=countActive('Clarence'); document.getElementById('wClarenceOverdue').textContent=countOverdue('Clarence'); document.getElementById('wClarenceDone').textContent=countDone('Clarence'); document.getElementById('wmarci-irTargets').textContent=getOwnerTargets('marci-ir').length; document.getElementById('wmarci-irActive').textContent=countActive('marci-ir'); document.getElementById('wmarci-irOverdue').textContent=countOverdue('marci-ir'); document.getElementById('wmarci-irDone').textContent=countDone('marci-ir'); } }
     function bindCellEdits(table){ document.querySelectorAll(`[data-table="${table}"][contenteditable="true"]`).forEach(el=>{ el.onblur=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; const text=el.textContent.trim(); if(table==='weekly') state.weekly[idx][key]=text; else if(table==='targets'){ const t=state.targets[idx]; if(['score','mf','inf','dp','tp','sl'].includes(key)) t[key]=Number(text)||0; else t[key]=text; } else if(table==='groups') state.groups[idx][key]=text; else if(table==='scripts') state.scripts[idx][key]=text; else if(table==='worksteps'){ state.worksteps[idx][key]=text; } saveAll(); }; }); }
-    function bindSelects(table){ document.querySelectorAll(`[data-table="${table}"] select`).forEach(el=>{ el.onchange=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; if(table==='targets'){ state.targets[idx][key]=el.value; if(key==='owner') state.targets[idx].workstream=workstreamForOwner(el.value); } if(table==='groups') state.groups[idx][key]=el.value; if(table==='scripts') state.scripts[idx][key]=el.value; if(table==='worksteps'){ state.worksteps[idx][key]=el.value; if(key==='0' && state.worksteps[idx]) state.worksteps[idx][1]=workstreamForOwner(el.value); } saveAll(); }; }); }
+    function bindSelects(table){ document.querySelectorAll(`[data-table="${table}"] select`).forEach(el=>{ el.onchange=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; if(table==='targets'){ state.targets[idx][key]=el.value; if(key==='owner') state.targets[idx].workstream=workstreamForOwner(el.value); } if(table==='groups') state.groups[idx][key]=el.value; if(table==='scripts'){ state.scripts[idx][key]=el.value; if(key==='status'){ if(el.value==='Approved' && !state.scripts[idx].publishReadyDate) state.scripts[idx].publishReadyDate=todayISO(); el.className='status-select '+statusColorClass(el.value); } } if(table==='worksteps'){ state.worksteps[idx][key]=el.value; if(key==='0' && state.worksteps[idx]) state.worksteps[idx][1]=workstreamForOwner(el.value); } saveAll(); }; }); }
     function bindDeleteButtons(kind){ if(kind==='targets') document.querySelectorAll('[data-del-target]').forEach(btn=>btn.onclick=()=>{ state.targets.splice(+btn.dataset.delTarget,1); saveAll(); }); if(kind==='groups') document.querySelectorAll('[data-del-group]').forEach(btn=>btn.onclick=()=>{ state.groups.splice(+btn.dataset.delGroup,1); saveAll(); }); if(kind==='scripts') document.querySelectorAll('[data-del-script]').forEach(btn=>btn.onclick=()=>{ state.scripts.splice(+btn.dataset.delScript,1); saveAll(); }); }
     function addTarget(){ state.targets.unshift({name:'',title:'',org:'',category:'Community + Institution Tech',source:'',score:0,mf:0,inf:0,dp:0,tp:0,sl:0,conn:'Uncontacted',eng:'Cold',dm:'Not Sent',last:'',next:'Connect',nextDate:'',pillar:'Community meets infrastructure',notes:'',outcome:'Nurture',owner:'Clarence',workstream:'Marketing'}); saveAll(); activeSection('targets'); }
     function addGroup(){ state.groups.push({name:'',category:'Community + Institution Tech',size:'',relevance:'High',access:'Open',admins:'',value:'High',notes:'',action:'Engage'}); saveAll(); activeSection('groups'); }
-    function addScript(){ state.scripts.push({pillar:'Community meets infrastructure',audience:'Values-Based Leaders',hook:'',draft:'',cta:'',use:'LinkedIn Post',status:'Draft'}); saveAll(); activeSection('scripts'); }
+    function addScript(){ state.scripts.push({pillar:'Community meets infrastructure',audience:'Values-Based Leaders',hook:'',draft:'',cta:'',use:'LinkedIn Post',status:'Draft',createdDate:todayISO(),publishReadyDate:'',owner:'Clarence'}); saveAll(); activeSection('scripts'); }
     function resetWeek(){ state.weekly = defaultData().weekly; saveAll(); activeSection('weekly'); }
     function renderAll(){ ensureDerived(); renderTargets(); renderTop25(); renderGroups(); renderScripts(); renderWeekly(); renderWorksteps(); updateDashboard(); }
     function syncDerivedScores(){ ensureDerived(); }
@@ -722,8 +762,48 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for S
     document.getElementById('searchTargets').oninput=renderTargets; document.getElementById('filterCategory').onchange=renderTargets; document.getElementById('filterOwner').onchange=renderTargets; document.getElementById('filterStatus').onchange=renderTargets; document.getElementById('btnResetFilters').onclick=()=>{ document.getElementById('searchTargets').value=''; document.getElementById('filterCategory').value=''; document.getElementById('filterOwner').value=''; document.getElementById('filterStatus').value=''; renderTargets(); };
     document.getElementById('btnMagicLink').onclick=sendMagicLink; document.getElementById('btnSignOut').onclick=signOut; document.getElementById('btnSyncNow').onclick=syncNow;
     function renderFilters(){ const cat=document.getElementById('filterCategory'); const stat=document.getElementById('filterStatus'); const cval=cat.value, sval=stat.value; cat.innerHTML='<option value="">All Categories</option>'+CATEGORIES.map(c=>`<option>${c}</option>`).join(''); stat.innerHTML='<option value="">All DM Statuses</option>'+DMSTATUS.map(s=>`<option>${s}</option>`).join(''); cat.value=cval; stat.value=sval; }
-    async function boot(){ syncDerivedScores(); renderAll(); renderFilters(); saveLocal(); if(hasConfig && window.supabase){ await initSupabase(); if(currentUser) await loadRemote(); } else setSyncUI('local','No shared storage configured yet. Add Supabase URL and anon key in config.js to enable sync.'); }
+    function bindScriptDates(){
+      document.querySelectorAll('input.cell-date').forEach(inp=>{
+        inp.onchange=()=>{ const idx=+inp.dataset.idx, key=inp.dataset.key; state.scripts[idx][key]=inp.value; saveAll(); };
+      });
+    }
+    function bindPreviewButtons(){
+      document.querySelectorAll('[data-preview-idx]').forEach(btn=>{
+        btn.onclick=()=>openPreview(state.scripts[+btn.dataset.previewIdx]);
+      });
+    }
+    function openPreview(s){
+      if(!s) return;
+      document.getElementById('previewBody').innerHTML =
+        '<h2>'+esc(s.hook||'Untitled')+'</h2>'+
+        '<div class="byline">'+esc(s.use||'Post')+(s.owner?' · by '+esc(s.owner):'')+(s.publishReadyDate?' · ready '+esc(s.publishReadyDate):'')+'</div>'+
+        '<div class="body-text">'+esc(s.draft||'')+'</div>'+
+        (s.cta?'<div class="cta">'+esc(s.cta)+'</div>':'');
+      document.getElementById('previewModal').hidden=false;
+    }
+    function wireAdvancedUI(){
+      const advBtn=document.getElementById('btnAdvanced'), advMenu=document.getElementById('advancedMenu');
+      if(advBtn && advMenu){
+        advBtn.onclick=(e)=>{ e.stopPropagation(); const open=advMenu.hidden; advMenu.hidden=!open; advBtn.setAttribute('aria-expanded',String(open)); };
+        document.addEventListener('click',(e)=>{ if(!e.target.closest('.advanced-wrap')){ advMenu.hidden=true; advBtn.setAttribute('aria-expanded','false'); } });
+      }
+      const clearBtn=document.getElementById('btnClear');
+      if(clearBtn){
+        clearBtn.addEventListener('click',(e)=>{ if(!confirm('Clear ALL local data? This cannot be undone. Export a JSON backup first if unsure.')){ e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+      }
+      const pc=document.getElementById('previewClose'); if(pc) pc.onclick=()=>{ document.getElementById('previewModal').hidden=true; };
+      const overlay=document.getElementById('previewModal'); if(overlay) overlay.addEventListener('click',(e)=>{ if(e.target===overlay) overlay.hidden=true; });
+      const cp=document.getElementById('previewCopy'); if(cp) cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(document.getElementById('previewBody').innerText); cp.textContent='Copied!'; setTimeout(()=>cp.textContent='Copy to clipboard',1500); }catch(_){ } };
+    }
+    async function boot(){ syncDerivedScores(); renderAll(); wireAdvancedUI(); renderFilters(); saveLocal(); if(hasConfig && window.supabase){ await initSupabase(); if(currentUser) await loadRemote(); } else setSyncUI('local','No shared storage configured yet. Add Supabase URL and anon key in config.js to enable sync.'); }
     boot();
   </script>
+  <div class="modal-overlay" id="previewModal" hidden>
+    <div class="modal-card">
+      <button class="modal-close" id="previewClose" aria-label="Close">×</button>
+      <article class="preview-body" id="previewBody"></article>
+      <button class="btn primary btn-copy" id="previewCopy">Copy to clipboard</button>
+    </div>
+  </div>
 </body>
 </html>
