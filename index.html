@@ -247,7 +247,26 @@
       ['marci-ir','Investment Outreach','Send approved outreach batch','Pending','2026-06-30',''],
       ['marci-ir','Investment Outreach','Log responses and follow-ups','Pending','2026-07-02','']
     ], notes:[] }; }
-    function loadLocal(){ try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; } }
+    function migrateLabel(value){
+      const map = {
+        'Faith + Church Tech':'Community + Institution Tech',
+        'Faith Investors':'Values-Aligned Capital',
+        'Faith meets infrastructure':'Community meets infrastructure',
+        'Ethical AI in spiritual contexts':'Ethical AI in spiritual and values-based contexts',
+        'Financial stewardship and fintech':'Financial stewardship and modern rails',
+        'Faith Leaders':'Values-Based Leaders',
+        'Clergy':'Trusted Leaders'
+      };
+      return map[value] || value;
+    }
+    function migrateState(raw){
+      if(!raw || typeof raw !== 'object') return raw;
+      if(Array.isArray(raw.targets)) raw.targets = raw.targets.map(t=>({ ...t, category:migrateLabel(t.category), pillar:migrateLabel(t.pillar), title:migrateLabel(t.title), owner:t.owner || 'Clarence' }));
+      if(Array.isArray(raw.groups)) raw.groups = raw.groups.map(g=>({ ...g, category:migrateLabel(g.category), name:migrateLabel(g.name) }));
+      if(Array.isArray(raw.scripts)) raw.scripts = raw.scripts.map(s=>({ ...s, pillar:migrateLabel(s.pillar), audience:migrateLabel(s.audience), hook:String(s.hook||'').replace('Faith communities','Trusted communities'), draft:String(s.draft||'').replaceAll('Faith communities','Trusted communities').replaceAll('spiritual authority','human authority') }));
+      return raw;
+    }
+    function loadLocal(){ try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? migrateState(JSON.parse(raw)) : null; } catch { return null; } }
     function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
     function sampleTarget(name,title,org,category,source,score,mf,inf,dp,tp,sl,conn,eng,dm,last,next,nextDate,pillar,notes,outcome,owner){ return {name,title,org,category,source,score:+score,mf:+mf,inf:+inf,dp:+dp,tp:+tp,sl:+sl,conn,eng,dm,last,next,nextDate,pillar,notes,outcome,owner}; }
     function total(t){ return (+t.mf||0)+(+t.inf||0)+(+t.dp||0)+(+t.tp||0)+(+t.sl||0); }
@@ -295,12 +314,14 @@
     }
 
     function normalizeState(raw){
+      raw = migrateState(raw);
       const base = defaultData();
       return {
         targets: Array.isArray(raw?.targets) ? raw.targets : base.targets,
         groups: Array.isArray(raw?.groups) ? raw.groups : base.groups,
         scripts: Array.isArray(raw?.scripts) ? raw.scripts : base.scripts,
         weekly: Array.isArray(raw?.weekly) ? raw.weekly : base.weekly,
+        worksteps: Array.isArray(raw?.worksteps) ? raw.worksteps : base.worksteps,
         notes: Array.isArray(raw?.notes) ? raw.notes : base.notes
       };
     }
