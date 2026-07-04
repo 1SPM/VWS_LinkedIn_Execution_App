@@ -256,15 +256,386 @@
     let state = loadLocal() || defaultData();
 
     function defaultData(){ return { targets:[
-      sampleTarget('Alicia Reed','Founder','CommunityWorks Labs','Community + Institution Tech','LinkedIn group',5,5,4,4,5,5,'Connected','Active','Sent','2026-06-28','DM','2026-06-29','Community meets infrastructure','Strong operator with community access','Intro','Clarence'),
-      sampleTarget('Marcus Chen','Investor','Covenant Ventures','Values-Aligned Capital','Referral',5,4,5,5,5,5,'Requested','Warmed','Replied','2026-06-27','Call','2026-06-30','Financial stewardship and modern rails','Capital + network leverage','Opportunity','marci-ir'),
-      sampleTarget('Dr. Elaine Morris','Ethics Advisor','Institute for Responsible AI','Responsible AI','Comment thread',4,5,4,4,4,4,'Uncontacted','Cold','Not Sent','','Connect','','Ethical AI in spiritual and values-based contexts','Strong governance credibility','Nurture','marci-ir'),
-      sampleTarget('David King','Community Innovation Lead','New Hope Fellowship','Community + Institution Tech','Search',4,5,3,4,4,4,'Requested','Warmed','Sent','2026-06-28','Follow-up','2026-07-01','The future of community','Relevant to care and community systems','Nurture','Clarence'),
-      sampleTarget('Priya Patel','Fintech Operator','StewardPay','Fintech','Group',4,3,4,4,5,4,'Connected','Active','Booked','2026-06-28','Call','2026-07-02','Financial stewardship and modern rails','Payments / rails / stewardship fit','Meeting','marci-ir')
-    ], groups:[
-      {name:'Community Tech Innovators', category:'Community + Institution Tech', size:'3.2K', relevance:'High', access:'Open', admins:'Community leads', value:'High', notes:'Operators and builders', action:'Engage'},
-      {name:'Values-Aligned Capital Network', category:'Values-Aligned Capital', size:'1.1K', relevance:'High', access:'Request', admins:'Investors', value:'High', notes:'Capital and intros', action:'Join'}
-    ], scripts:[
+      {
+            "name": "",
+            "title": "",
+            "org": "",
+            "category": "Community + Institution Tech",
+            "source": "",
+            "score": 0,
+            "mf": 0,
+            "inf": 0,
+            "dp": 0,
+            "tp": 0,
+            "sl": 0,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "",
+            "pillar": "Community meets infrastructure",
+            "notes": "",
+            "outcome": "Nurture",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Nona Jones",
+            "title": "Faith & Technology Leader, Author, Speaker",
+            "org": "Christian Digital Ministry",
+            "category": "Community + Institution Tech",
+            "source": "LinkedIn Search",
+            "score": 22,
+            "mf": 5,
+            "inf": 4,
+            "dp": 4,
+            "tp": 5,
+            "sl": 4,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-06-30",
+            "pillar": "Community meets infrastructure",
+            "notes": "High-priority prospect for christian digital ministry and trust-centered spiritual guidance.",
+            "outcome": "Nurture",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Bobby Gruenewald",
+            "title": "YouVersion Founder, Life.Church Innovation Leader",
+            "org": "Life.Church / YouVersion",
+            "category": "Community + Institution Tech",
+            "source": "LinkedIn Search",
+            "score": 24,
+            "mf": 5,
+            "inf": 5,
+            "dp": 5,
+            "tp": 4,
+            "sl": 5,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-01",
+            "pillar": "Community meets infrastructure",
+            "notes": "YouVersion founder. Key faith-tech decision maker. Top priority.",
+            "outcome": "Intro",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Carey Nieuwhof",
+            "title": "Church Leadership Author and Podcaster",
+            "org": "Carey Nieuwhof Leadership Podcast",
+            "category": "Community + Institution Tech",
+            "source": "LinkedIn Search",
+            "score": 20,
+            "mf": 4,
+            "inf": 5,
+            "dp": 4,
+            "tp": 4,
+            "sl": 3,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Comment",
+            "nextDate": "2026-07-02",
+            "pillar": "The future of community",
+            "notes": "High-priority church leadership prospect.",
+            "outcome": "Intro",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Eboo Patel",
+            "title": "Founder of Interfaith America",
+            "org": "Interfaith America",
+            "category": "Responsible AI",
+            "source": "LinkedIn Search",
+            "score": 23,
+            "mf": 5,
+            "inf": 5,
+            "dp": 4,
+            "tp": 5,
+            "sl": 4,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-03",
+            "pillar": "Ethical AI in spiritual and values-based contexts",
+            "notes": "Best category-builder style prospect. Strong bridge into interfaith institutions.",
+            "outcome": "Intro",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Diana Eck",
+            "title": "Harvard Comparative Religion Scholar",
+            "org": "Harvard / Pluralism Project",
+            "category": "Responsible AI",
+            "source": "LinkedIn/Google Search",
+            "score": 19,
+            "mf": 5,
+            "inf": 4,
+            "dp": 3,
+            "tp": 4,
+            "sl": 3,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-07",
+            "pillar": "Ethical AI in spiritual and values-based contexts",
+            "notes": "Academic credibility for world religions and pluralism. Advisor/referral more likely than platform leader.",
+            "outcome": "Nurture",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Ilia Delio",
+            "title": "Theologian Focused on Science, Technology & Spirituality",
+            "org": "Center for Christogenesis",
+            "category": "Responsible AI",
+            "source": "LinkedIn Search",
+            "score": 21,
+            "mf": 5,
+            "inf": 4,
+            "dp": 4,
+            "tp": 4,
+            "sl": 4,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-08",
+            "pillar": "Ethical AI in spiritual and values-based contexts",
+            "notes": "Strongest fit for Catholic + AI + evolution + spirituality. Already in original, keep top priority.",
+            "outcome": "Intro",
+            "owner": "Clarence",
+            "workstream": "Marketing"
+      },
+      {
+            "name": "Danielle Strickland",
+            "title": "Speaker, Justice Advocate, Spiritual Leader",
+            "org": "Christian Ministry",
+            "category": "Nonprofit Tech",
+            "source": "LinkedIn Search",
+            "score": 18,
+            "mf": 4,
+            "inf": 4,
+            "dp": 3,
+            "tp": 4,
+            "sl": 3,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-02",
+            "pillar": "The future of community",
+            "notes": "Potential Verified Leader prospect for christian ministry and responsible spiritual guidance.",
+            "outcome": "Nurture",
+            "owner": "marci-ir",
+            "workstream": "Investment Outreach"
+      },
+      {
+            "name": "Pete Greig",
+            "title": "Founder of 24-7 Prayer, Author",
+            "org": "24-7 Prayer International",
+            "category": "Community + Institution Tech",
+            "source": "LinkedIn Search",
+            "score": 20,
+            "mf": 5,
+            "inf": 4,
+            "dp": 4,
+            "tp": 4,
+            "sl": 3,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-03",
+            "pillar": "The future of community",
+            "notes": "High-priority for prayer and church community + trust-centered spiritual guidance.",
+            "outcome": "Intro",
+            "owner": "marci-ir",
+            "workstream": "Investment Outreach"
+      },
+      {
+            "name": "Latasha Morrison",
+            "title": "Founder of Be the Bridge, Author",
+            "org": "Be the Bridge",
+            "category": "Nonprofit Tech",
+            "source": "LinkedIn Search",
+            "score": 20,
+            "mf": 5,
+            "inf": 4,
+            "dp": 4,
+            "tp": 4,
+            "sl": 3,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-04",
+            "pillar": "The future of community",
+            "notes": "High-priority for racial reconciliation, Christian leadership and trust-centered spiritual guidance.",
+            "outcome": "Intro",
+            "owner": "marci-ir",
+            "workstream": "Investment Outreach"
+      },
+      {
+            "name": "Beth Singler",
+            "title": "Anthropologist of AI and Religion",
+            "org": "Cambridge University",
+            "category": "Responsible AI",
+            "source": "Academic Profile; LinkedIn",
+            "score": 20,
+            "mf": 5,
+            "inf": 4,
+            "dp": 3,
+            "tp": 4,
+            "sl": 4,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-05",
+            "pillar": "Ethical AI in spiritual and values-based contexts",
+            "notes": "Directly relevant to AI, religion and public trust. Ask for critique/advisory perspective.",
+            "outcome": "Nurture",
+            "owner": "marci-ir",
+            "workstream": "Investment Outreach"
+      },
+      {
+            "name": "Heidi Campbell",
+            "title": "Scholar of Digital Religion",
+            "org": "Texas A&M",
+            "category": "Responsible AI",
+            "source": "LinkedIn; Academic Networks",
+            "score": 19,
+            "mf": 5,
+            "inf": 4,
+            "dp": 3,
+            "tp": 4,
+            "sl": 3,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-06",
+            "pillar": "Ethical AI in spiritual and values-based contexts",
+            "notes": "Directly relevant to religious technology and online communities. Ask for perspective on digital religion ethics.",
+            "outcome": "Nurture",
+            "owner": "marci-ir",
+            "workstream": "Investment Outreach"
+      },
+      {
+            "name": "Imam Abdullah Antepli",
+            "title": "Interfaith Leader and Scholar",
+            "org": "Duke / Interfaith Networks",
+            "category": "Responsible AI",
+            "source": "LinkedIn; Interfaith Networks",
+            "score": 21,
+            "mf": 5,
+            "inf": 4,
+            "dp": 4,
+            "tp": 4,
+            "sl": 4,
+            "conn": "Uncontacted",
+            "eng": "Cold",
+            "dm": "Not Sent",
+            "last": "",
+            "next": "Connect",
+            "nextDate": "2026-07-07",
+            "pillar": "Ethical AI in spiritual and values-based contexts",
+            "notes": "Strong Muslim interfaith credibility. Lead with interfaith safeguards and representation.",
+            "outcome": "Intro",
+            "owner": "marci-ir",
+            "workstream": "Investment Outreach"
+      }
+], groups:[
+      {
+            "name": "Faith Tech Innovators",
+            "category": "Community + Institution Tech",
+            "size": "3.2K",
+            "relevance": "High",
+            "access": "Open",
+            "admins": "Community leads, operators",
+            "value": "High",
+            "notes": "Operators and builders - Clarence focus",
+            "action": "Engage"
+      },
+      {
+            "name": "Interfaith Leaders Network",
+            "category": "Responsible AI",
+            "size": "1.8K",
+            "relevance": "High",
+            "access": "Request",
+            "admins": "Eboo Patel network",
+            "value": "High",
+            "notes": "Cross-tradition leaders - Clarence focus",
+            "action": "Join"
+      },
+      {
+            "name": "Digital Ministry Leaders",
+            "category": "Community + Institution Tech",
+            "size": "4.1K",
+            "relevance": "High",
+            "access": "Open",
+            "admins": "Church tech operators",
+            "value": "High",
+            "notes": "Church technology and digital outreach - Clarence focus",
+            "action": "Engage"
+      },
+      {
+            "name": "Chaplaincy & Spiritual Care",
+            "category": "Nonprofit Tech",
+            "size": "2.4K",
+            "relevance": "High",
+            "access": "Open",
+            "admins": "Chaplains, care coordinators",
+            "value": "High",
+            "notes": "Chaplaincy and pastoral care professionals - Marci focus",
+            "action": "Join"
+      },
+      {
+            "name": "AI Ethics & Religion Forum",
+            "category": "Responsible AI",
+            "size": "890",
+            "relevance": "High",
+            "access": "Request",
+            "admins": "Beth Singler, academics",
+            "value": "High",
+            "notes": "AI + religion ethics dialogue - Marci focus",
+            "action": "Join"
+      },
+      {
+            "name": "Mindfulness & Wellness Leaders",
+            "category": "Nonprofit Tech",
+            "size": "5.6K",
+            "relevance": "Medium",
+            "access": "Open",
+            "admins": "Wellness educators",
+            "value": "Medium",
+            "notes": "Mindfulness and wellness community leaders - Marci focus",
+            "action": "Monitor"
+      }
+], scripts:[
       {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Institutions', hook:'The awkward question layer: what we noticed when AI made belief easier to approach', draft:`# The awkward question layer: what we noticed when AI made belief easier to approach
 
 ### Field notes from building AI systems in high-trust human environments.
@@ -590,19 +961,92 @@ If we build for trust, we might protect it.
 
 That is the difference.
 
-DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for Substack, then repurpose into a LinkedIn authority post.', use:'Substack Article', status:'Ready for Approval'},
+DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Substack, then repurpose into a LinkedIn authority post.', use:'Substack Article', status:'Approved'},
       {pillar:'Community meets infrastructure', audience:'Values-Based Leaders', hook:'Trusted communities do not need more apps.', draft:'Trusted communities do not need more apps. They need infrastructure that strengthens care, belonging, stewardship, and human leadership.', cta:'Where is the biggest infrastructure gap?', use:'LinkedIn Post', status:'Draft'},
       {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Investors', hook:'AI should never replace human authority.', draft:'AI should never replace human authority in contexts where trust, care, identity, and belonging matter. Governance is not a legal appendix. It is part of the product.', cta:'What boundaries should hold?', use:'LinkedIn Post', status:'Draft'},
       {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Institutions', hook:'Field notes from building AI systems in high-trust human environments.', draft:'Substack brief: Use Sean’s field-notes voice to explain one hard trust problem, why it matters for communities and institutions, what responsible AI must not replace, and what VWS is learning as infrastructure is built for high-trust environments.', cta:'Subscribe for field notes on trust-first AI infrastructure.', use:'Substack Article', status:'Draft'},
       {pillar:'The future of community', audience:'Community Builders', hook:'A DivinityAGI video should become more than a video.', draft:'YouTube tie-in: Pull one grounded idea from Divinity | Voices of AGI, translate it into a calm LinkedIn insight, then expand it into a Substack field note. Keep the frame human-led, values-based, and trust-first.', cta:'Watch the source, then read the field note.', use:'YouTube Tie-In', status:'Draft'}
-    ], weekly:[['Monday','Review sources','Pick one YouTube/Substack/LinkedIn source idea and assign pillar',''],['Tuesday','LinkedIn authority post','Category-building post from the source idea',''],['Wednesday','Outreach','DMs and connection follow-ups tied to the week’s theme',''],['Thursday','Substack field note','Long-form trust-first article with LinkedIn teaser',''],['Friday','Review','KPI update, source performance, and next-week planning','']], worksteps:[
-      ['Clarence','Marketing','Select weekly source: YouTube video, Substack idea, or LinkedIn theme','Pending','2026-06-29',''],
-      ['Clarence','Marketing','Draft LinkedIn authority post and Substack field note','Pending','2026-06-30',''],
-      ['Clarence','Marketing','Review content performance and repurpose winners','Pending','2026-07-02',''],
-      ['marci-ir','Investment Outreach','Build Batch 1 target list','Pending','2026-06-29',''],
-      ['marci-ir','Investment Outreach','Send approved outreach batch','Pending','2026-06-30',''],
-      ['marci-ir','Investment Outreach','Log responses and follow-ups','Pending','2026-07-02','']
-    ], notes:[] }; }
+    ], weekly:[
+      [
+            "Monday",
+            "Review targets — Clarence & Marci pipelines",
+            "Priority list for the week, per agent",
+            ""
+      ],
+      [
+            "Tuesday",
+            "Authority posts — both agents publish",
+            "Clarence: Faith infra post | Marci: Chaplaincy/Ethics post",
+            ""
+      ],
+      [
+            "Wednesday",
+            "Outreach — connection requests and DMs",
+            "Clarence: 5 Interfaith/Faith-Tech connects | Marci: 5 Chaplaincy/AI-Ethics connects",
+            ""
+      ],
+      [
+            "Thursday",
+            "Trust post — both agents",
+            "Clarence: Theology + AI ethics post | Marci: Mindfulness + care post",
+            ""
+      ],
+      [
+            "Friday",
+            "KPI review — both agents report",
+            "KPI update, next-week planning, agent sync",
+            ""
+      ]
+], worksteps:[
+      [
+            "Clarence",
+            "Marketing",
+            "Select weekly source: YouTube video, Substack idea, or LinkedIn theme",
+            "Done",
+            "2026-06-29",
+            "Source selected: DivinityAGI / Voices of AGI awkward-question layer video."
+      ],
+      [
+            "Clarence",
+            "Marketing",
+            "Draft LinkedIn authority post and Substack field note",
+            "Done",
+            "2026-06-30",
+            "Substack article approved by Sean; next action is publish/repurpose."
+      ],
+      [
+            "Clarence",
+            "Marketing",
+            "Review content performance and repurpose winners",
+            "Pending",
+            "2026-07-02",
+            "Next after publication."
+      ],
+      [
+            "marci-ir",
+            "Investment Outreach",
+            "Build Batch 1 target list",
+            "Pending",
+            "2026-06-29",
+            "Recovered from Sean export; investment lane belongs to marci-ir."
+      ],
+      [
+            "marci-ir",
+            "Investment Outreach",
+            "Send approved outreach batch",
+            "Pending",
+            "2026-06-30",
+            "Do not execute from Clarence profile."
+      ],
+      [
+            "marci-ir",
+            "Investment Outreach",
+            "Log responses and follow-ups",
+            "Pending",
+            "2026-07-02",
+            ""
+      ]
+], notes:"Hermes Agent Dashboard — VWS / Divinity Project\n\nAgent: CLARENCE\nDepartments: A (Faith + Digital Ministry), B (Interfaith + Theology)\nSpreadsheet: https://docs.google.com/spreadsheets/d/10rXmBYT7GDQwp4AyuKWr7U7c8xY5t_cOt2f5Ql2gOI8/edit?usp=sharing\nFocus: Christian digital ministry leaders, faith-tech innovators, interfaith scholars\nTop Targets: Bobby Gruenewald, Eboo Patel, Ilia Delio, Nona Jones, Diana Eck, Carey Nieuwhof\n\nAgent: MARCI\nDepartments: C (Chaplaincy + Care), D (Mindfulness + Wellness), E (AI + Religion Ethics)\nSpreadsheet: https://docs.google.com/spreadsheets/d/10rXmBYT7GDQwp4AyuKWr7U7c8xY5t_cOt2f5Ql2gOI8/edit?usp=sharing\nFocus: Chaplains, spiritual care practitioners, AI/religion academics, wellness leaders\nTop Targets: Beth Singler, Heidi Campbell, Imam Abdullah Antepli, Pete Greig, Latasha Morrison, Danielle Strickland\n\nShared Spreadsheet: 170617 Divinity - Verified Leader Lead Mining Targets\nFilter by Owner field to view each agent's pipeline separately.\nUse Search and Category filters on Targets tab to segment by department." }; }
     function migrateLabel(value){
       const map = {
         'Faith + Church Tech':'Community + Institution Tech',
@@ -644,6 +1088,22 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for S
     function activeSection(id){ document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id)); document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id)); }
     function setSyncUI(mode, detail){ const dot = document.getElementById('syncDot'); const label = document.getElementById('syncLabel'); const det = document.getElementById('syncDetail'); if(mode==='shared'){ dot.className='dot ok'; label.textContent='Shared storage connected'; } else if(mode==='auth'){ dot.className='dot warn'; label.textContent='Signed in, sync pending'; } else { dot.className='dot off'; label.textContent='Local mode'; } det.textContent = detail || ''; }
 
+    function payloadWeight(payload){
+      if(!payload) return 0;
+      const scripts = Array.isArray(payload.scripts) ? payload.scripts : [];
+      const groups = Array.isArray(payload.groups) ? payload.groups : [];
+      const targets = Array.isArray(payload.targets) ? payload.targets : [];
+      const worksteps = Array.isArray(payload.worksteps) ? payload.worksteps : [];
+      const namedTargets = targets.filter(t => String(t?.name || '').trim()).length;
+      const namedGroups = groups.filter(g => String(g?.name || '').trim()).length;
+      const realScripts = scripts.filter(s => String(s?.hook || s?.draft || '').trim()).length;
+      const doneSteps = worksteps.filter(w => Array.isArray(w) && w[3] === 'Done').length;
+      return namedTargets * 10 + namedGroups * 5 + realScripts * 4 + doneSteps * 3 + targets.length + groups.length + scripts.length;
+    }
+    function isRemoteClearlyStale(remotePayload, localPayload){
+      return payloadWeight(localPayload) > payloadWeight(remotePayload) && payloadWeight(remotePayload) <= 20;
+    }
+
     async function initSupabase(){
       if(!hasConfig || !window.supabase){ setSyncUI('local', hasConfig ? 'Supabase library not loaded.' : 'No shared storage configured yet.'); return; }
       sb = window.supabase.createClient(APP_CONFIG.supabaseUrl, APP_CONFIG.supabaseAnonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
@@ -674,7 +1134,15 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Approve for S
           const remoteState = data.payload;
           const localStamp = Number(localStorage.getItem(STORAGE_KEY + '_ts') || '0');
           const remoteStamp = Date.parse(data.updated_at || '') || 0;
-          if(remoteStamp >= localStamp){ state = normalizeState(remoteState); saveLocal(); localStorage.setItem(STORAGE_KEY + '_ts', String(remoteStamp)); }
+          if(remoteStamp >= localStamp){
+            if(isRemoteClearlyStale(remoteState, state)){
+              setSyncUI('auth', 'Remote row looked empty/stale; preserved richer local dashboard. Click Sync Now to publish recovered data.');
+            } else {
+              state = normalizeState(remoteState);
+              saveLocal();
+              localStorage.setItem(STORAGE_KEY + '_ts', String(remoteStamp));
+            }
+          }
         }
         renderAll();
         setSyncUI('shared', `Synced from Supabase${data?.updated_by ? ' · last updated by ' + data.updated_by : ''}.`);
