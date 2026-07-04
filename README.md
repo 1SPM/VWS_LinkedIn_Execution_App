@@ -48,3 +48,8 @@ http://localhost:8001/
 - The dashboard is intentionally static-friendly.
 - Shared state is stored in one JSON payload row for simplicity.
 - If the team grows or the schema needs finer-grained collaboration, split into normalized tables later.
+
+## Ownership model
+- Clarence owns Marketing.
+- marci-ir owns Investment Outreach.
+- The dashboard UI and shared state should make both workstreams visible at a glance.
