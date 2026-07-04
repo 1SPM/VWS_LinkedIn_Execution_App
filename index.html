@@ -183,7 +183,7 @@
 
     <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2><div class="small">Track groups, relevance, and action.</div></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Group Name</th><th>Category</th><th>Size</th><th>Relevance</th><th>Access Level</th><th>Admins / Influencers</th><th>Engagement Value</th><th>Notes</th><th>Action</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
-    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Posts + DM Scripts</h2><div class="small">Store hooks, drafts, CTAs, and use cases here.</div></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Hook</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Posts + DM Scripts</h2><div class="small">Store Substack article briefs, LinkedIn posts, YouTube tie-ins, hooks, CTAs, and DM scripts here.</div></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Hook</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
     <section id="weekly" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Weekly Plan</h2><div class="small">Use this to keep the system moving.</div></div><button class="btn" id="btnLoadWeek">Reset Week Template</button></div><div class="table-wrap"><table id="weeklyTable" style="min-width:0"><thead><tr><th>Day</th><th>Focus</th><th>Output</th><th>Completed</th></tr></thead><tbody></tbody></table></div></div></section>
 
@@ -217,7 +217,7 @@
     const RELEVANCE = ['High','Medium','Low'];
     const ENGVAL = ['High','Medium','Low'];
     const AUDIENCES = ['Investors','Trusted Leaders','Institutions','Partners','Community Builders','Values-Based Leaders','Advisors'];
-    const USECASES = ['Post','Comment','DM','Follow-up','Connection Request'];
+    const USECASES = ['LinkedIn Post','Substack Article','YouTube Tie-In','Post','Comment','DM','Follow-up','Connection Request'];
     const SCRIPT_STATUS = ['Draft','Approved','Used'];
     const STEP_STATUS = ['Pending','In Progress','Blocked','Done'];
     const STEP_TYPES = ['Marketing','Investment Outreach'];
@@ -237,12 +237,14 @@
       {name:'Community Tech Innovators', category:'Community + Institution Tech', size:'3.2K', relevance:'High', access:'Open', admins:'Community leads', value:'High', notes:'Operators and builders', action:'Engage'},
       {name:'Values-Aligned Capital Network', category:'Values-Aligned Capital', size:'1.1K', relevance:'High', access:'Request', admins:'Investors', value:'High', notes:'Capital and intros', action:'Join'}
     ], scripts:[
-      {pillar:'Community meets infrastructure', audience:'Values-Based Leaders', hook:'Trusted communities do not need more apps.', draft:'Trusted communities do not need more apps. They need infrastructure that strengthens care, belonging, stewardship, and human leadership.', cta:'Where is the biggest infrastructure gap?', use:'Post', status:'Draft'},
-      {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Investors', hook:'AI should never replace human authority.', draft:'AI should never replace human authority in contexts where trust, care, identity, and belonging matter. Governance is not a legal appendix. It is part of the product.', cta:'What boundaries should hold?', use:'Post', status:'Draft'}
-    ], weekly:[['Monday','Review targets','Priority list for the week',''],['Tuesday','Authority post','Category-building post',''],['Wednesday','Outreach','DMs and connection follow-ups',''],['Thursday','Trust post','Governance / ethics / community post',''],['Friday','Review','KPI update and next-week planning','']], worksteps:[
-      ['Clarence','Marketing','Draft weekly content calendar','Pending','2026-06-29',''],
-      ['Clarence','Marketing','Publish authority post','Pending','2026-06-30',''],
-      ['Clarence','Marketing','Review post performance','Pending','2026-07-02',''],
+      {pillar:'Community meets infrastructure', audience:'Values-Based Leaders', hook:'Trusted communities do not need more apps.', draft:'Trusted communities do not need more apps. They need infrastructure that strengthens care, belonging, stewardship, and human leadership.', cta:'Where is the biggest infrastructure gap?', use:'LinkedIn Post', status:'Draft'},
+      {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Investors', hook:'AI should never replace human authority.', draft:'AI should never replace human authority in contexts where trust, care, identity, and belonging matter. Governance is not a legal appendix. It is part of the product.', cta:'What boundaries should hold?', use:'LinkedIn Post', status:'Draft'},
+      {pillar:'Ethical AI in spiritual and values-based contexts', audience:'Institutions', hook:'Field notes from building AI systems in high-trust human environments.', draft:'Substack brief: Use Sean’s field-notes voice to explain one hard trust problem, why it matters for communities and institutions, what responsible AI must not replace, and what VWS is learning as infrastructure is built for high-trust environments.', cta:'Subscribe for field notes on trust-first AI infrastructure.', use:'Substack Article', status:'Draft'},
+      {pillar:'The future of community', audience:'Community Builders', hook:'A DivinityAGI video should become more than a video.', draft:'YouTube tie-in: Pull one grounded idea from Divinity | Voices of AGI, translate it into a calm LinkedIn insight, then expand it into a Substack field note. Keep the frame human-led, values-based, and trust-first.', cta:'Watch the source, then read the field note.', use:'YouTube Tie-In', status:'Draft'}
+    ], weekly:[['Monday','Review sources','Pick one YouTube/Substack/LinkedIn source idea and assign pillar',''],['Tuesday','LinkedIn authority post','Category-building post from the source idea',''],['Wednesday','Outreach','DMs and connection follow-ups tied to the week’s theme',''],['Thursday','Substack field note','Long-form trust-first article with LinkedIn teaser',''],['Friday','Review','KPI update, source performance, and next-week planning','']], worksteps:[
+      ['Clarence','Marketing','Select weekly source: YouTube video, Substack idea, or LinkedIn theme','Pending','2026-06-29',''],
+      ['Clarence','Marketing','Draft LinkedIn authority post and Substack field note','Pending','2026-06-30',''],
+      ['Clarence','Marketing','Review content performance and repurpose winners','Pending','2026-07-02',''],
       ['marci-ir','Investment Outreach','Build Batch 1 target list','Pending','2026-06-29',''],
       ['marci-ir','Investment Outreach','Send approved outreach batch','Pending','2026-06-30',''],
       ['marci-ir','Investment Outreach','Log responses and follow-ups','Pending','2026-07-02','']
@@ -313,13 +315,21 @@
       } catch(err){ console.warn('remote load failed', err); setSyncUI('auth', 'Shared sync unavailable right now; using local data.'); }
     }
 
+    function mergeScriptLibrary(scripts, baseScripts){
+      const rows = Array.isArray(scripts) ? scripts : [];
+      baseScripts.forEach(s => {
+        if(!rows.some(r => r.hook === s.hook && r.use === s.use)) rows.push(s);
+      });
+      return rows;
+    }
+
     function normalizeState(raw){
       raw = migrateState(raw);
       const base = defaultData();
       return {
         targets: Array.isArray(raw?.targets) ? raw.targets : base.targets,
         groups: Array.isArray(raw?.groups) ? raw.groups : base.groups,
-        scripts: Array.isArray(raw?.scripts) ? raw.scripts : base.scripts,
+        scripts: mergeScriptLibrary(raw?.scripts, base.scripts),
         weekly: Array.isArray(raw?.weekly) ? raw.weekly : base.weekly,
         worksteps: Array.isArray(raw?.worksteps) ? raw.worksteps : base.worksteps,
         notes: Array.isArray(raw?.notes) ? raw.notes : base.notes
@@ -367,7 +377,7 @@
     function bindDeleteButtons(kind){ if(kind==='targets') document.querySelectorAll('[data-del-target]').forEach(btn=>btn.onclick=()=>{ state.targets.splice(+btn.dataset.delTarget,1); saveAll(); }); if(kind==='groups') document.querySelectorAll('[data-del-group]').forEach(btn=>btn.onclick=()=>{ state.groups.splice(+btn.dataset.delGroup,1); saveAll(); }); if(kind==='scripts') document.querySelectorAll('[data-del-script]').forEach(btn=>btn.onclick=()=>{ state.scripts.splice(+btn.dataset.delScript,1); saveAll(); }); }
     function addTarget(){ state.targets.unshift({name:'',title:'',org:'',category:'Community + Institution Tech',source:'',score:0,mf:0,inf:0,dp:0,tp:0,sl:0,conn:'Uncontacted',eng:'Cold',dm:'Not Sent',last:'',next:'Connect',nextDate:'',pillar:'Community meets infrastructure',notes:'',outcome:'Nurture',owner:'Clarence',workstream:'Marketing'}); saveAll(); activeSection('targets'); }
     function addGroup(){ state.groups.push({name:'',category:'Community + Institution Tech',size:'',relevance:'High',access:'Open',admins:'',value:'High',notes:'',action:'Engage'}); saveAll(); activeSection('groups'); }
-    function addScript(){ state.scripts.push({pillar:'Community meets infrastructure',audience:'Values-Based Leaders',hook:'',draft:'',cta:'',use:'Post',status:'Draft'}); saveAll(); activeSection('scripts'); }
+    function addScript(){ state.scripts.push({pillar:'Community meets infrastructure',audience:'Values-Based Leaders',hook:'',draft:'',cta:'',use:'LinkedIn Post',status:'Draft'}); saveAll(); activeSection('scripts'); }
     function resetWeek(){ state.weekly = defaultData().weekly; saveAll(); activeSection('weekly'); }
     function renderAll(){ ensureDerived(); renderTargets(); renderTop25(); renderGroups(); renderScripts(); renderWeekly(); renderWorksteps(); updateDashboard(); }
     function syncDerivedScores(){ ensureDerived(); }
