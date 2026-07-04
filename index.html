@@ -68,9 +68,9 @@
     tr.stale-row td:first-child{box-shadow:inset 3px 0 0 #ff6b6b}
     input.cell-date{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:6px;padding:3px 6px;font:inherit}
     /* --- Stage 4: preview modal --- */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:60;padding:24px}
+    .modal-overlay{--modal-top-gap:clamp(108px,14vh,156px);position:fixed;inset:0;background:rgba(0,0,0,.66);display:flex;align-items:flex-start;justify-content:center;z-index:60;padding:var(--modal-top-gap) 24px 32px;overflow:auto;overscroll-behavior:contain}
     .modal-overlay[hidden]{display:none}
-    .modal-card{background:#131722;border:1px solid #2a3142;border-radius:12px;width:min(720px,calc(100vw - 48px));max-height:calc(100vh - 48px);overflow:auto;padding:28px;position:relative;box-shadow:0 18px 60px rgba(0,0,0,.42)}
+    .modal-card{background:#131722;border:1px solid #2a3142;border-radius:12px;width:min(720px,calc(100vw - 48px));max-height:calc(100vh - var(--modal-top-gap) - 32px);overflow:auto;padding:28px;position:relative;box-shadow:0 18px 60px rgba(0,0,0,.42);margin:0 auto}
     .modal-close{position:absolute;top:10px;right:14px;background:none;border:none;color:#9aa4bd;font-size:22px;cursor:pointer}
     .preview-body{color:#e8ecf5;line-height:1.6}
     .preview-body h2{margin:0 0 4px;font-size:20px}
@@ -1256,6 +1256,7 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
         '<div class="body-text">'+esc(s.draft||'')+'</div>'+
         (s.cta?'<div class="cta">'+esc(s.cta)+'</div>':'');
       document.getElementById('previewModal').hidden=false;
+      document.body.style.overflow='hidden';
     }
     function wireAdvancedUI(){
       const advBtn=document.getElementById('btnAdvanced'), advMenu=document.getElementById('advancedMenu');
@@ -1267,8 +1268,9 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
       if(clearBtn){
         clearBtn.addEventListener('click',(e)=>{ if(!confirm('Clear ALL local data? This cannot be undone. Export a JSON backup first if unsure.')){ e.stopImmediatePropagation(); e.preventDefault(); } }, true);
       }
-      const pc=document.getElementById('previewClose'); if(pc) pc.onclick=()=>{ document.getElementById('previewModal').hidden=true; };
-      const overlay=document.getElementById('previewModal'); if(overlay) overlay.addEventListener('click',(e)=>{ if(e.target===overlay) overlay.hidden=true; });
+      const closePreview=()=>{ document.getElementById('previewModal').hidden=true; document.body.style.overflow=''; };
+      const pc=document.getElementById('previewClose'); if(pc) pc.onclick=closePreview;
+      const overlay=document.getElementById('previewModal'); if(overlay) overlay.addEventListener('click',(e)=>{ if(e.target===overlay) closePreview(); });
       const cp=document.getElementById('previewCopy'); if(cp) cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(document.getElementById('previewBody').innerText); cp.textContent='Copied!'; setTimeout(()=>cp.textContent='Copy to clipboard',1500); }catch(_){ } };
     }
     async function boot(){ syncDerivedScores(); renderAll(); wireAdvancedUI(); renderFilters(); saveLocal(); if(hasConfig && window.supabase){ await initSupabase(); if(currentUser) await loadRemote(); } else setSyncUI('local','No shared storage configured yet. Add Supabase URL and anon key in config.js to enable sync.'); }
