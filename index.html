@@ -79,6 +79,16 @@
     .preview-body .meta-chip{border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);color:#cfd8ee;font-size:12px;padding:4px 9px}
     .preview-body .body-text{white-space:pre-wrap;margin-bottom:16px}
     .preview-body .cta{font-weight:600;color:#bff9de}
+    .format-guidance{border:1px solid rgba(106,167,255,.24);background:rgba(106,167,255,.08);border-radius:14px;padding:12px;margin:12px 0 16px;color:#dce6ff}
+    .format-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}
+    .format-tab{border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:7px 10px;cursor:pointer;font:inherit;font-size:12px}
+    .format-tab.active{background:rgba(61,220,151,.15);border-color:rgba(61,220,151,.34);color:#bff9de}
+    .format-card{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:14px;padding:14px;margin:12px 0}
+    .format-card.active{border-color:rgba(61,220,151,.36);box-shadow:inset 3px 0 0 rgba(61,220,151,.7)}
+    .format-card h3{margin:0 0 6px;font-size:16px;color:#f2f6ff}
+    .format-card .format-note{color:#aab7d6;font-size:12px;margin-bottom:10px}
+    .format-card .format-text{white-space:pre-wrap;line-height:1.62}
+    .format-card .format-count{margin-top:10px;color:#9aa4bd;font-size:12px}
     .btn-copy{margin-top:18px}
   </style>
 </head>
@@ -253,7 +263,7 @@
     const RELEVANCE = ['High','Medium','Low'];
     const ENGVAL = ['High','Medium','Low'];
     const AUDIENCES = ['Investors','Trusted Leaders','Institutions','Partners','Community Builders','Values-Based Leaders','Advisors'];
-    const USECASES = ['LinkedIn Post','Substack Article','YouTube Tie-In','Post','Comment','DM','Follow-up','Connection Request'];
+    const USECASES = ['Substack Article','LinkedIn Post','YouTube Tie-In','Post','Comment','DM','Follow-up','Connection Request'];
     const SCRIPT_STATUS = ['Draft','Ready for Approval','Approved','Used'];
     const STEP_STATUS = ['Pending','In Progress','Blocked','Done'];
     const STEP_TYPES = ['Marketing','Investment Outreach'];
@@ -1248,6 +1258,58 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
         btn.onclick=()=>openPreview(state.scripts[+btn.dataset.previewIdx]);
       });
     }
+    function compactWhitespace(text){ return String(text||'').replace(/\s+/g,' ').trim(); }
+    function firstSentences(text, maxChars){
+      const clean = compactWhitespace(String(text||'').replace(/^#+\s*/gm,''));
+      if(clean.length <= maxChars) return clean;
+      const parts = clean.match(/[^.!?]+[.!?]+/g) || [clean];
+      let out = '';
+      for(const part of parts){
+        if((out + ' ' + part).trim().length > maxChars) break;
+        out = (out + ' ' + part).trim();
+      }
+      return out || clean.slice(0,maxChars-1).trim() + '…';
+    }
+    function paragraphBlocks(text){ return String(text||'').split(/\n{2,}/).map(p=>p.trim()).filter(Boolean); }
+    function formatCount(text){ const chars=String(text||'').length; const words=compactWhitespace(text).split(' ').filter(Boolean).length; return `${words} words · ${chars} chars`; }
+    const FORMAT_RULES = {
+      'Substack Article': {
+        note: 'Source of truth. Clarence should draft this first in full field-note/article length, then derive every shorter format from it.',
+        build: (s)=>[s.draft||'', s.cta?`\n\nCTA: ${s.cta}`:''].join('')
+      },
+      'LinkedIn Post': {
+        note: 'Authority post derived from the article: one sharp insight, calm category-building tone, no hype, human leadership in view.',
+        build: (s)=>`${s.hook||firstSentences(s.draft,160)}\n\n${firstSentences(s.draft,1100)}\n\n${s.cta||'What are you noticing in high-trust communities right now?'}`
+      },
+      'YouTube Tie-In': {
+        note: 'Bridge from video/source material to the article: what was observed, what it taught us, and why it matters for trust-first infrastructure.',
+        build: (s)=>`Video / source tie-in:\n\n${s.hook||'One field note from the source material'}\n\nWhat we noticed: ${firstSentences(s.draft,650)}\n\nWhy it matters: this is not about replacing human leaders. It is about learning where responsible systems can help people approach better questions.\n\n${s.cta||'Watch the source, then read the full field note.'}`
+      },
+      'Post': {
+        note: 'Short social post for secondary channels. Keep one idea, one implication, one question.',
+        build: (s)=>`${s.hook||firstSentences(s.draft,120)}\n\n${firstSentences(s.draft,520)}\n\n${s.cta||'Worth paying attention to.'}`
+      },
+      'Comment': {
+        note: 'Lightweight engagement comment. Add value without pitching.',
+        build: (s)=>`This is the right question. The infrastructure layer matters because trust is not created by adding another app; it is created by designing around human leadership, governance, and responsibility.`
+      },
+      'DM': {
+        note: 'Warm direct message for community/partner audiences. Do not use for investor outreach from Clarence.',
+        build: (s)=>`Hi — I appreciated your work around trusted communities and responsible technology.\n\nWe are exploring a related question at VWS: ${firstSentences(s.draft,260)}\n\nNo pitch here. I would value your perspective on where communities most need better digital infrastructure.`
+      },
+      'Follow-up': {
+        note: 'Follow-up after a prior touch. Keep it respectful, low-pressure, and useful.',
+        build: (s)=>`Following up with one clearer frame:\n\n${s.hook||firstSentences(s.draft,140)}\n\nThe core question is not whether technology can produce more content. It is whether it can strengthen trust, accountability, and human connection.\n\nWould your perspective be helpful here?`
+      },
+      'Connection Request': {
+        note: 'Short LinkedIn connection note. Stay agnostic and non-salesy.',
+        build: (s)=>`I am following leaders thinking about trust, community, and responsible technology. Your work seems relevant to what we are learning at VWS. Would be glad to connect.`
+      }
+    };
+    function derivedFormats(s){
+      const source = {...s, draft:String(s?.draft||''), hook:String(s?.hook||''), cta:String(s?.cta||'')};
+      return USECASES.map(name=>({ name, note:FORMAT_RULES[name]?.note || '', text:(FORMAT_RULES[name]?.build || ((row)=>row.draft))(source) }));
+    }
     function openPreview(s){
       if(!s) return;
       const meta = [
@@ -1255,12 +1317,19 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
         s.publishReadyDate ? 'Publish-Ready: '+esc(s.publishReadyDate) : '',
         s.status ? 'Status: '+esc(s.status) : ''
       ].filter(Boolean).map(x=>'<span class="meta-chip">'+x+'</span>').join('');
+      const formats = derivedFormats(s);
+      const formatNav = '<div class="format-toolbar">'+formats.map(f=>'<button class="format-tab '+(f.name===s.use?'active':'')+'" data-format-target="'+esc(f.name)+'">'+esc(f.name)+'</button>').join('')+'</div>';
+      const formatCards = formats.map(f=>'<section class="format-card '+(f.name===s.use?'active':'')+'" data-format-card="'+esc(f.name)+'"><h3>'+esc(f.name)+'</h3><div class="format-note">'+esc(f.note)+'</div><div class="format-text">'+esc(f.text)+'</div><div class="format-count">'+esc(formatCount(f.text))+'</div></section>').join('');
       document.getElementById('previewBody').innerHTML =
         '<h2>'+esc(s.hook||'Untitled')+'</h2>'+
-        '<div class="byline">'+esc(s.use||'Post')+(s.owner?' · by '+esc(s.owner):'')+'</div>'+
+        '<div class="byline">Full-length source → use-case previews'+(s.owner?' · by '+esc(s.owner):'')+'</div>'+
         '<div class="meta-grid">'+meta+'</div>'+
-        '<div class="body-text">'+esc(s.draft||'')+'</div>'+
-        (s.cta?'<div class="cta">'+esc(s.cta)+'</div>':'');
+        '<div class="format-guidance"><strong>Clarence directive:</strong> begin with the full Substack / LinkedIn article as the source of truth. Use the shorter formats below only as derivatives for each channel or outreach use case.</div>'+
+        formatNav+formatCards+
+        (s.cta?'<div class="cta">Base CTA: '+esc(s.cta)+'</div>':'');
+      document.querySelectorAll('[data-format-target]').forEach(btn=>{
+        btn.onclick=()=>document.querySelector(`[data-format-card="${CSS.escape(btn.dataset.formatTarget)}"]`)?.scrollIntoView({behavior:'smooth',block:'start'});
+      });
       document.getElementById('previewModal').hidden=false;
       document.body.style.overflow='hidden';
     }
