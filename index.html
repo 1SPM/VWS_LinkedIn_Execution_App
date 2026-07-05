@@ -79,16 +79,18 @@
     .preview-body .meta-chip{border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);color:#cfd8ee;font-size:12px;padding:4px 9px}
     .preview-body .body-text{white-space:pre-wrap;margin-bottom:16px}
     .preview-body .cta{font-weight:600;color:#bff9de}
-    .format-guidance{border:1px solid rgba(106,167,255,.24);background:rgba(106,167,255,.08);border-radius:14px;padding:12px;margin:12px 0 16px;color:#dce6ff}
     .format-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}
     .format-tab{border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:7px 10px;cursor:pointer;font:inherit;font-size:12px}
     .format-tab.active{background:rgba(61,220,151,.15);border-color:rgba(61,220,151,.34);color:#bff9de}
     .format-card{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:14px;padding:14px;margin:12px 0}
     .format-card.active{border-color:rgba(61,220,151,.36);box-shadow:inset 3px 0 0 rgba(61,220,151,.7)}
+    .format-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
     .format-card h3{margin:0 0 6px;font-size:16px;color:#f2f6ff}
     .format-card .format-note{color:#aab7d6;font-size:12px;margin-bottom:10px}
     .format-card .format-text{white-space:pre-wrap;line-height:1.62}
     .format-card .format-count{margin-top:10px;color:#9aa4bd;font-size:12px}
+    .format-copy{flex:0 0 auto;border-radius:999px;border:1px solid rgba(106,167,255,.28);background:rgba(106,167,255,.10);color:#cae0ff;padding:5px 9px;cursor:pointer;font:inherit;font-size:12px}
+    .format-copy:hover{background:rgba(106,167,255,.18)}
     .btn-copy{margin-top:18px}
   </style>
 </head>
@@ -1270,7 +1272,6 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
       }
       return out || clean.slice(0,maxChars-1).trim() + '…';
     }
-    function paragraphBlocks(text){ return String(text||'').split(/\n{2,}/).map(p=>p.trim()).filter(Boolean); }
     function formatCount(text){ const chars=String(text||'').length; const words=compactWhitespace(text).split(' ').filter(Boolean).length; return `${words} words · ${chars} chars`; }
     const FORMAT_RULES = {
       'Substack Article': {
@@ -1319,16 +1320,26 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
       ].filter(Boolean).map(x=>'<span class="meta-chip">'+x+'</span>').join('');
       const formats = derivedFormats(s);
       const formatNav = '<div class="format-toolbar">'+formats.map(f=>'<button class="format-tab '+(f.name===s.use?'active':'')+'" data-format-target="'+esc(f.name)+'">'+esc(f.name)+'</button>').join('')+'</div>';
-      const formatCards = formats.map(f=>'<section class="format-card '+(f.name===s.use?'active':'')+'" data-format-card="'+esc(f.name)+'"><h3>'+esc(f.name)+'</h3><div class="format-note">'+esc(f.note)+'</div><div class="format-text">'+esc(f.text)+'</div><div class="format-count">'+esc(formatCount(f.text))+'</div></section>').join('');
+      const formatCards = formats.map(f=>'<section class="format-card '+(f.name===s.use?'active':'')+'" data-format-card="'+esc(f.name)+'"><div class="format-card-header"><h3>'+esc(f.name)+'</h3><button class="format-copy" data-copy-format="'+esc(f.name)+'">Copy section</button></div><div class="format-note">'+esc(f.note)+'</div><div class="format-text">'+esc(f.text)+'</div><div class="format-count">'+esc(formatCount(f.text))+'</div></section>').join('');
       document.getElementById('previewBody').innerHTML =
         '<h2>'+esc(s.hook||'Untitled')+'</h2>'+
         '<div class="byline">Full-length source → use-case previews'+(s.owner?' · by '+esc(s.owner):'')+'</div>'+
         '<div class="meta-grid">'+meta+'</div>'+
-        '<div class="format-guidance"><strong>Clarence directive:</strong> begin with the full Substack / LinkedIn article as the source of truth. Use the shorter formats below only as derivatives for each channel or outreach use case.</div>'+
         formatNav+formatCards+
         (s.cta?'<div class="cta">Base CTA: '+esc(s.cta)+'</div>':'');
       document.querySelectorAll('[data-format-target]').forEach(btn=>{
         btn.onclick=()=>document.querySelector(`[data-format-card="${CSS.escape(btn.dataset.formatTarget)}"]`)?.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+      document.querySelectorAll('[data-copy-format]').forEach(btn=>{
+        btn.onclick=async()=>{
+          const item = formats.find(f=>f.name===btn.dataset.copyFormat);
+          if(!item) return;
+          try{
+            await navigator.clipboard.writeText(item.text);
+            btn.textContent='Copied';
+            setTimeout(()=>btn.textContent='Copy section',1200);
+          }catch(_){ }
+        };
       });
       document.getElementById('previewModal').hidden=false;
       document.body.style.overflow='hidden';
