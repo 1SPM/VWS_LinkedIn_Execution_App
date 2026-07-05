@@ -50,8 +50,12 @@
     .preview-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.preview{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
     .preview .n{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.preview .v{font-size:22px;font-weight:800;margin-top:5px}
     .statusbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}.dot{width:10px;height:10px;border-radius:50%}.dot.ok{background:var(--accent2)}.dot.warn{background:var(--warn)}.dot.off{background:#6f7d9b}
-    .syncbox{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
-  
+    .syncbox{margin-top:12px;padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);display:inline-flex;align-items:center;max-width:max-content}
+    #authControls,#userLabel,#agentSyncRow,.syncbox #syncDetail{display:none!important}
+    .hero{padding:16px}.hero h1{font-size:24px}.hero p{display:none}
+    .nav{margin:12px 0 16px}.nav .tab[data-tab='workstreams'],.nav .tab[data-tab='top25'],.nav .tab[data-tab='weekly'],.nav .tab[data-tab='kpis']{display:none}
+    #dashboard .card h2{margin-bottom:8px}
+
     /* --- Stage 1: Advanced menu --- */
     .advanced-wrap{position:relative;display:inline-block}
     .advanced-menu{position:absolute;right:0;top:110%;background:#131722;border:1px solid #2a3142;border-radius:10px;padding:6px;min-width:190px;z-index:40;display:flex;flex-direction:column;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -100,7 +104,7 @@
       <div class="row" style="justify-content:space-between">
         <div>
           <h1>VWS LinkedIn Execution App</h1>
-          <p>Interactive browser dashboard for targets, Top 25 ranking, groups, posts, DMs, weekly execution, and KPI review. Synced to the marci-ir investment outreach workstream and shared ownership model, with Marci's mission tracked in a way that keeps the cadence visible and the progress easy to respect.</p>
+          <p></p>
         </div>
         <div class="toolbar">
         <button class="btn good" id="btnAddTarget">+ Add Investor Target</button>
@@ -148,25 +152,19 @@
 
     <section id="dashboard" class="section active">
       <div class="grid cols-4" style="margin-bottom:14px">
-        <div class="metric good"><div class="label">Investment Targets</div><div class="value" id="mTotalTargets">0</div></div>
-        <div class="metric warn"><div class="label">Top Investor Priority</div><div class="value" id="mTopPriority">0</div></div>
-        <div class="metric"><div class="label">Replies This Week</div><div class="value" id="mReplies">0</div></div>
-        <div class="metric hot"><div class="label">Meetings Booked</div><div class="value" id="mMeetings">0</div></div>
+        <div class="metric good"><div class="label">Targets</div><div class="value" id="mTotalTargets">0</div></div>
+        <div class="metric"><div class="label">Connected</div><div class="value" id="mConnected">0</div></div>
+        <div class="metric warn"><div class="label">Need Touch</div><div class="value" id="mUncontacted">0</div></div>
+        <div class="metric hot"><div class="label">Meetings</div><div class="value" id="mMeetings">0</div></div>
       </div>
-      <div class="grid cols-4" style="margin-bottom:14px">
-        <div class="preview"><div class="n">Clarence · Content Queue</div><div class="v" id="mClarence">0</div></div>
-        <div class="preview"><div class="n">marci-ir · Investor Pipeline</div><div class="v" id="mmarci-ir">0</div></div>
-        <div class="preview"><div class="n">Uncontacted</div><div class="v" id="mUncontacted">0</div></div>
-        <div class="preview"><div class="n">In Conversation</div><div class="v" id="mInConversation">0</div></div>
-      </div>
-      <div class="card" style="margin-bottom:14px"><h2>Agent Hub Posture</h2><div class="small">This dashboard is a shared operating hub. Clarence manages marketing/content systems; marci-ir manages investor targets, networking, follow-ups, and relationship progress. The Investment Targets tab is intentionally marci-ir only.</div></div>
+      <span class="hidden" id="mTopPriority">0</span><span class="hidden" id="mReplies">0</span><span class="hidden" id="mClarence">0</span><span class="hidden" id="mmarci-ir">0</span><span class="hidden" id="mInConversation">0</span>
       <div class="grid cols-2">
         <div class="card">
-          <h2>Investor Pipeline Health</h2>
+          <h2>Pipeline</h2>
           <div class="table-wrap"><table style="min-width:0"><thead><tr><th>Status</th><th>Count</th></tr></thead><tbody id="pipelineTable"></tbody></table></div>
         </div>
         <div class="card">
-          <h2>Investor Category Distribution</h2>
+          <h2>Segments</h2>
           <div class="table-wrap"><table style="min-width:0"><thead><tr><th>Category</th><th>Count</th></tr></thead><tbody id="categoryTable"></tbody></table></div>
         </div>
       </div>
@@ -176,14 +174,14 @@
       <div class="card">
         <div class="row" style="justify-content:space-between">
           <div>
-            <h2>marci-ir · Investment Targets</h2>
-            <div class="small">Investor relations pipeline only. Track capital channels, advisor/investor prospects, networking status, next action, and relationship outcomes here. Clarence marketing work belongs in Posts + DM Scripts, Groups, and Workstreams.</div>
+            <h2>Targets</h2>
+
           </div>
           <div class="row">
             <input id="searchTargets" type="search" placeholder="Search name, org, title, notes..." />
             <select id="filterCategory"><option value="">All Categories</option></select>
             <select id="filterOwner" class="hidden"><option value="marci-ir">marci-ir</option></select>
-            <span class="pill blue">marci-ir · Investment Outreach only</span>
+
             <select id="filterStatus"><option value="">All DM Statuses</option></select>
             <button class="btn" id="btnResetFilters">Reset Filters</button>
           </div>
@@ -224,15 +222,15 @@
       </div>
     </section>
 
-    <section id="top25" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Investor Top 25</h2><div class="small">marci-ir investment pipeline, auto-sorted by score. Keep this list elite.</div></div><button class="btn" id="btnFocusTop25">Refresh Investor Top 25</button></div><div class="table-wrap"><table id="top25Table"><thead><tr><th>Rank</th><th>Name</th><th>Category</th><th>Score</th><th>Tier</th><th>Connection</th><th>DM Status</th><th>Next Action</th><th>Next Action Date</th><th>Pillar</th><th>Notes</th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="top25" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Top Targets</h2></div><button class="btn" id="btnFocusTop25">Refresh Investor Top 25</button></div><div class="table-wrap"><table id="top25Table"><thead><tr><th>Rank</th><th>Name</th><th>Category</th><th>Score</th><th>Tier</th><th>Connection</th><th>DM Status</th><th>Next Action</th><th>Next Action Date</th><th>Pillar</th><th>Notes</th></tr></thead><tbody></tbody></table></div></div></section>
 
-    <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2><div class="small">Track groups, relevance, and action.</div></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Group Name</th><th>Category</th><th>Size</th><th>Relevance</th><th>Access Level</th><th>Admins / Influencers</th><th>Engagement Value</th><th>Notes</th><th>Action</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Group Name</th><th>Category</th><th>Size</th><th>Relevance</th><th>Access Level</th><th>Admins / Influencers</th><th>Engagement Value</th><th>Notes</th><th>Action</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
 
     <section id="strategy" class="section">
       <div class="grid cols-2">
-        <div class="card"><h2>Spreadsheet Coverage</h2><div class="small">Full shared-sheet import used by marci-ir for relationship intelligence and contact discovery.</div><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Sheet</th><th>Rows</th></tr></thead><tbody id="coverageTable"></tbody></table></div></div>
-        <div class="card"><h2>Lead Discovery Playbook</h2><div class="small">Use each organization as a seed to find named humans in context: principals, analysts, partners, portfolio founders, event speakers, chapter leads, board members, advisors, and warm-intro paths.</div><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Lane</th><th>Discovery Strategy</th></tr></thead><tbody id="notesTable"></tbody></table></div></div>
+        <div class="card"><h2>Spreadsheet Coverage</h2><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Sheet</th><th>Rows</th></tr></thead><tbody id="coverageTable"></tbody></table></div></div>
+        <div class="card"><h2>Lead Discovery Playbook</h2><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Lane</th><th>Discovery Strategy</th></tr></thead><tbody id="notesTable"></tbody></table></div></div>
       </div>
       <div class="grid cols-2" style="margin-top:14px">
         <div class="card"><h2>Join / Mining Sequence</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Week</th><th>Action</th><th>Target</th><th>Notes</th></tr></thead><tbody id="joinSequenceTable"></tbody></table></div></div>
@@ -241,9 +239,9 @@
       <div class="card" style="margin-top:14px"><h2>Positioning + Trust Strategy</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Type</th><th>Finding / Direction</th><th>Action / Why</th></tr></thead><tbody id="strategyTable"></tbody></table></div></div>
     </section>
 
-    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Posts + DM Scripts</h2><div class="small">Store source signals, Substack article briefs, LinkedIn posts, YouTube tie-ins, hooks, CTAs, and DM scripts here.</div></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Source Type</th><th>Source / Link</th><th>Sequence Role</th><th>Hook (summary)</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th>Created</th><th>Publish-Ready</th><th>Preview</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Scripts</h2></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Source Type</th><th>Source / Link</th><th>Sequence Role</th><th>Hook (summary)</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th>Created</th><th>Publish-Ready</th><th>Preview</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
-    <section id="weekly" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Weekly Plan</h2><div class="small">Use this to keep the system moving.</div></div><button class="btn" id="btnLoadWeek">Reset Week Template</button></div><div class="table-wrap"><table id="weeklyTable" style="min-width:0"><thead><tr><th>Day</th><th>Focus</th><th>Output</th><th>Completed</th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="weekly" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Weekly Plan</h2></div><button class="btn" id="btnLoadWeek">Reset Week Template</button></div><div class="table-wrap"><table id="weeklyTable" style="min-width:0"><thead><tr><th>Day</th><th>Focus</th><th>Output</th><th>Completed</th></tr></thead><tbody></tbody></table></div></div></section>
 
     <section id="kpis" class="section">
       <div class="grid cols-3">
@@ -251,10 +249,10 @@
         <div class="card"><h2>Mid-Funnel Indicators</h2><ul><li>Conversations started</li><li>Meetings booked</li><li>Introductions received</li><li>Follow-up replies</li></ul></div>
         <div class="card"><h2>Outcome Indicators</h2><ul><li>Partnerships</li><li>Pilots</li><li>Investor interest</li><li>Advisor interest</li></ul></div>
       </div>
-      <div class="card" style="margin-top:14px"><h2>Notes</h2><div class="small">Every target must have a score, status, next action, and next action date.</div></div>
+
     </section>
 
-    <div class="footer">Tip: Use <span class="kbd">Ctrl/Cmd + F</span> for fast search. Data persists in the browser and can optionally sync to Supabase.</div>
+
   </div>
 
   <script>
@@ -5679,7 +5677,7 @@
 
     function renderWeekly(){ const tbody=document.querySelector('#weeklyTable tbody'); tbody.innerHTML=state.weekly.map((w,i)=>`<tr><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="0">${esc(w[0])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="1">${esc(w[1])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="2">${esc(w[2])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="3">${esc(w[3])}</td></tr>`).join(''); bindCellEdits('weekly'); }
     function renderWorksteps(){ const tbody=document.querySelector('#workstepsTable tbody'); if(!tbody) return; tbody.innerHTML=(state.worksteps||[]).map((w,i)=>`<tr><td><select data-table="worksteps" data-idx="${i}" data-key="0">${OWNERS.map(x=>`<option ${x===w[0]?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td>${esc(workstreamForOwner(w[0]))}</td><td contenteditable="true" data-table="worksteps" data-idx="${i}" data-key="2">${esc(w[2])}</td><td><select data-table="worksteps" data-idx="${i}" data-key="3">${STEP_STATUS.map(x=>`<option ${x===w[3]?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="worksteps" data-idx="${i}" data-key="4">${esc(w[4])}</td><td contenteditable="true" data-table="worksteps" data-idx="${i}" data-key="5">${esc(w[5])}</td></tr>`).join(''); bindCellEdits('worksteps'); bindSelects('worksteps'); }
-    function updateDashboard(){ const rows=getInvestorTargets(); const contentRows=state.scripts||[]; document.getElementById('mTotalTargets').textContent=rows.length; document.getElementById('mTopPriority').textContent=rows.filter(t=>total(t)>=20).length; document.getElementById('mReplies').textContent=rows.filter(t=>t.dm==='Replied').length; document.getElementById('mMeetings').textContent=rows.filter(t=>t.dm==='Booked').length; document.getElementById('mClarence').textContent=contentRows.filter(s=>String(s.status||'')!=='Used').length; document.getElementById('mmarci-ir').textContent=rows.length; document.getElementById('mUncontacted').textContent=rows.filter(t=>t.conn==='Uncontacted').length; document.getElementById('mInConversation').textContent=rows.filter(t=>t.dm==='Follow-up'||t.dm==='Replied').length; const pipe=['Uncontacted','Requested','Connected','Not Sent','Sent','Replied','Follow-up','Booked']; document.getElementById('pipelineTable').innerHTML=pipe.map(s=>`<tr><td>${esc(s)}</td><td>${rows.filter(t=>[t.conn,t.dm].includes(s)).length}</td></tr>`).join(''); document.getElementById('categoryTable').innerHTML=CATEGORIES.map(c=>`<tr><td>${esc(c)}</td><td>${rows.filter(t=>t.category===c).length}</td></tr>`).join(''); const syncBadge = document.querySelector('.syncbox #syncLabel'); if(syncBadge) syncBadge.textContent = SYNC_LABEL; const syncHint = document.querySelector('.syncbox #syncDetail'); if(syncHint && !syncHint.textContent) syncHint.textContent = OWNER_SUMMARY['marci-ir']; if(document.getElementById('wClarenceTargets')) { document.getElementById('wClarenceTargets').textContent=contentRows.length; document.getElementById('wClarenceActive').textContent=contentRows.filter(s=>['Draft','Ready for Approval'].includes(s.status)).length; document.getElementById('wClarenceOverdue').textContent=contentRows.filter(isStaleScript).length; document.getElementById('wClarenceDone').textContent=contentRows.filter(s=>['Approved','Used'].includes(s.status)).length; document.getElementById('wmarci-irTargets').textContent=getOwnerTargets('marci-ir').length; document.getElementById('wmarci-irActive').textContent=countActive('marci-ir'); document.getElementById('wmarci-irOverdue').textContent=countOverdue('marci-ir'); document.getElementById('wmarci-irDone').textContent=countDone('marci-ir'); } }
+    function updateDashboard(){ const rows=getInvestorTargets(); const contentRows=state.scripts||[]; const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; }; set('mTotalTargets',rows.length); set('mConnected',rows.filter(t=>t.conn==='Connected').length); set('mTopPriority',rows.filter(t=>total(t)>=20).length); set('mReplies',rows.filter(t=>t.dm==='Replied').length); set('mMeetings',rows.filter(t=>t.dm==='Booked').length); set('mClarence',contentRows.filter(s=>String(s.status||'')!=='Used').length); set('mmarci-ir',rows.length); set('mUncontacted',rows.filter(t=>t.conn==='Uncontacted').length); set('mInConversation',rows.filter(t=>t.dm==='Follow-up'||t.dm==='Replied').length); const pipe=['Uncontacted','Connected','Sent','Replied','Follow-up','Booked']; document.getElementById('pipelineTable').innerHTML=pipe.map(s=>`<tr><td>${esc(s)}</td><td>${rows.filter(t=>[t.conn,t.dm].includes(s)).length}</td></tr>`).join(''); document.getElementById('categoryTable').innerHTML=CATEGORIES.filter(c=>rows.some(t=>t.category===c)).map(c=>`<tr><td>${esc(c)}</td><td>${rows.filter(t=>t.category===c).length}</td></tr>`).join(''); const syncBadge = document.querySelector('.syncbox #syncLabel'); if(syncBadge) syncBadge.textContent = 'Synced'; if(document.getElementById('wClarenceTargets')) { document.getElementById('wClarenceTargets').textContent=contentRows.length; document.getElementById('wClarenceActive').textContent=contentRows.filter(s=>['Draft','Ready for Approval'].includes(s.status)).length; document.getElementById('wClarenceOverdue').textContent=contentRows.filter(isStaleScript).length; document.getElementById('wClarenceDone').textContent=contentRows.filter(s=>['Approved','Used'].includes(s.status)).length; document.getElementById('wmarci-irTargets').textContent=getOwnerTargets('marci-ir').length; document.getElementById('wmarci-irActive').textContent=countActive('marci-ir'); document.getElementById('wmarci-irOverdue').textContent=countOverdue('marci-ir'); document.getElementById('wmarci-irDone').textContent=countDone('marci-ir'); } }
     function bindCellEdits(table){ document.querySelectorAll(`[data-table="${table}"][contenteditable="true"]`).forEach(el=>{ el.onblur=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; const text=el.textContent.trim(); if(table==='weekly') state.weekly[idx][key]=text; else if(table==='targets'){ const t=state.targets[idx]; if(['score','mf','inf','dp','tp','sl'].includes(key)) t[key]=Number(text)||0; else t[key]=text; } else if(table==='groups') state.groups[idx][key]=text; else if(table==='scripts') state.scripts[idx][key]=text; else if(table==='worksteps'){ state.worksteps[idx][key]=text; } saveAll(); }; }); }
     function bindSelects(table){ document.querySelectorAll(`[data-table="${table}"] select`).forEach(el=>{ el.onchange=()=>{ const idx=+el.dataset.idx; const key=el.dataset.key; if(table==='targets'){ state.targets[idx][key]=el.value; if(key==='owner') state.targets[idx].workstream=workstreamForOwner(el.value); } if(table==='groups') state.groups[idx][key]=el.value; if(table==='scripts'){ state.scripts[idx][key]=el.value; if(key==='status'){ if(el.value==='Approved' && !state.scripts[idx].publishReadyDate) state.scripts[idx].publishReadyDate=todayISO(); el.className='status-select '+statusColorClass(el.value); } } if(table==='worksteps'){ state.worksteps[idx][key]=el.value; if(key==='0' && state.worksteps[idx]) state.worksteps[idx][1]=workstreamForOwner(el.value); } saveAll(); }; }); }
     function bindDeleteButtons(kind){ if(kind==='targets') document.querySelectorAll('[data-del-target]').forEach(btn=>btn.onclick=()=>{ state.targets.splice(+btn.dataset.delTarget,1); saveAll(); }); if(kind==='groups') document.querySelectorAll('[data-del-group]').forEach(btn=>btn.onclick=()=>{ state.groups.splice(+btn.dataset.delGroup,1); saveAll(); }); if(kind==='scripts') document.querySelectorAll('[data-del-script]').forEach(btn=>btn.onclick=()=>{ state.scripts.splice(+btn.dataset.delScript,1); saveAll(); }); }
@@ -5833,7 +5831,7 @@
     function goToTargetsFiltered(o){o=o||{};document.querySelector('.tab[data-tab="targets"]').click();var set=function(id,val){var e=document.getElementById(id);if(e){e.value=val||'';e.dispatchEvent(new Event('change',{bubbles:true}));}};set('filterCategory',o.category);set('filterOwner','marci-ir');set('filterStatus',o.status);window.__kpiConnFilterVal=o.conn||'';var c=document.getElementById('filterConn');if(c)c.value=o.conn||'';renderTargets();}
     function _lbl(c){var e=c.querySelector('.label,.n');return (e?e.textContent:'').trim().toLowerCase();}
     function _val(c){var e=c.querySelector('.value,.v');return e?parseInt(e.textContent.replace(/[^\d-]/g,''),10):NaN;}
-    function wireKpiDrilldowns(){var map={'investment targets':{},'top investor priority':{},'uncontacted':{conn:'Uncontacted'},'in conversation':{status:'Replied'},'replies this week':{status:'Replied'},'meetings booked':{status:'Booked'},'marci-ir · investor pipeline':{}};document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(card){if(card.dataset.drill)return;var l=_lbl(card),f=map[l];var go;if(l.indexOf('clarence')===0){go=function(){document.querySelector('.tab[data-tab="scripts"]').click();};}else if(f){go=function(){goToTargetsFiltered(f);};}else{return;}card.dataset.drill='1';card.style.cursor='pointer';card.setAttribute('role','button');card.tabIndex=0;card.title=l.indexOf('clarence')===0?'View Clarence content queue':'View marci-ir investment targets';card.addEventListener('click',go);card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});card.addEventListener('mouseenter',function(){card.style.outline='1px solid rgba(125,211,252,.5)';});card.addEventListener('mouseleave',function(){card.style.outline='';});});document.querySelectorAll('#dashboard .card table tbody tr').forEach(function(tr){if(tr.dataset.drill)return;var td=tr.querySelector('td');var key=td?td.textContent.trim():'';if(!key)return;tr.dataset.drill='1';tr.style.cursor='pointer';var conn=['Uncontacted','Requested','Connected'],dm=['Not Sent','Sent','Replied','Follow-up','Booked'];var f=conn.indexOf(key)>-1?{conn:key}:dm.indexOf(key)>-1?{status:key}:{category:key};tr.addEventListener('click',function(){goToTargetsFiltered(f);});tr.addEventListener('mouseenter',function(){tr.style.background='rgba(125,211,252,.08)';});tr.addEventListener('mouseleave',function(){tr.style.background='';});});}
+    function wireKpiDrilldowns(){var map={'targets':{},'connected':{conn:'Connected'},'need touch':{conn:'Uncontacted'},'meetings':{status:'Booked'}};document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(card){if(card.dataset.drill)return;var l=_lbl(card),f=map[l];var go;if(l.indexOf('clarence')===0){go=function(){document.querySelector('.tab[data-tab="scripts"]').click();};}else if(f){go=function(){goToTargetsFiltered(f);};}else{return;}card.dataset.drill='1';card.style.cursor='pointer';card.setAttribute('role','button');card.tabIndex=0;card.title=l.indexOf('clarence')===0?'View Clarence content queue':'View marci-ir investment targets';card.addEventListener('click',go);card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});card.addEventListener('mouseenter',function(){card.style.outline='1px solid rgba(125,211,252,.5)';});card.addEventListener('mouseleave',function(){card.style.outline='';});});document.querySelectorAll('#dashboard .card table tbody tr').forEach(function(tr){if(tr.dataset.drill)return;var td=tr.querySelector('td');var key=td?td.textContent.trim():'';if(!key)return;tr.dataset.drill='1';tr.style.cursor='pointer';var conn=['Uncontacted','Requested','Connected'],dm=['Not Sent','Sent','Replied','Follow-up','Booked'];var f=conn.indexOf(key)>-1?{conn:key}:dm.indexOf(key)>-1?{status:key}:{category:key};tr.addEventListener('click',function(){goToTargetsFiltered(f);});tr.addEventListener('mouseenter',function(){tr.style.background='rgba(125,211,252,.08)';});tr.addEventListener('mouseleave',function(){tr.style.background='';});});}
     function snapshotKpis(){var snap={};document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(c){var l=_lbl(c),v=_val(c);if(l&&!isNaN(v))snap[l]=v;});localStorage.setItem('vws_kpi_snapshot',JSON.stringify({date:new Date().toISOString().slice(0,10),vals:snap}));return snap;}
     function decorateMetrics(){var snap={};try{snap=(JSON.parse(localStorage.getItem('vws_kpi_snapshot')||'{}').vals)||{};}catch(e){}document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(c){var l=_lbl(c),cur=_val(c);if(isNaN(cur))return;var goal=window.KPI_GOALS[l],prev=snap[l],parts=[];if(goal!=null&&goal>0)parts.push(cur+' / '+goal);if(prev!=null){var d=cur-prev;parts.push(d>0?'▲ '+d:d<0?'▼ '+Math.abs(d):'– 0');}var sub=c.querySelector('.kpi-sub');if(!sub){sub=document.createElement('div');sub.className='kpi-sub';sub.style.cssText='font-size:11px;opacity:.65;margin-top:4px';c.appendChild(sub);}sub.textContent=parts.join('   ·   ');});}
     function renderKpiReview(){var T=window.__origGetFiltered?window.__origGetFiltered():JSON.parse(localStorage.getItem('vws_linkedin_dashboard_v3')).targets;var by=function(f){return T.filter(f).length;};var sent=by(function(t){return t.dm&&t.dm!=='Not Sent';});var repl=by(function(t){return t.dm==='Replied'||t.dm==='Follow-up'||t.dm==='Booked';});var nums={'Connection accepts':by(function(t){return t.conn==='Connected';}),'DM response rate':sent?Math.round(repl/sent*100)+'% ('+repl+'/'+sent+')':'0% (0/0)','Conversations started':by(function(t){return t.dm==='Replied'||t.dm==='Follow-up';}),'Meetings booked':by(function(t){return t.dm==='Booked';}),'Follow-up replies':by(function(t){return t.dm==='Follow-up';}),'Introductions received':by(function(t){return t.outcome==='Intro';}),'Partnerships':by(function(t){return t.outcome==='Partner'||t.outcome==='Partnership';})};document.querySelectorAll('#kpis li').forEach(function(li){var key=li.dataset.k||li.textContent.replace(/\s*[:—–]\s.*$/,'').replace(/\s+(manual|\d.*)$/,'').trim();li.dataset.k=key;if(nums[key]!=null)li.innerHTML=key+' <strong style="float:right;color:#7dd3fc">'+nums[key]+'</strong>';else if(!li.querySelector('.manual-tag'))li.innerHTML=key+' <span class="manual-tag" style="float:right;color:#64748b;font-size:11px">manual</span>';});}
@@ -5846,7 +5844,7 @@
     /* ===== Agent sync status (Clarence + marci-ir) ===== */
     (function(){
       var syncbox=document.querySelector('.syncbox');
-      if(syncbox&&!document.getElementById('agentSyncRow')){var div=document.createElement('div');div.className='row';div.id='agentSyncRow';div.style.cssText='margin-top:10px;gap:24px;flex-wrap:wrap';div.innerHTML='<div class="row" style="gap:8px"><span class="dot off" id="syncDotClarence"></span><strong>Clarence &middot; Marketing</strong><span class="small" id="syncDetailClarence"></span></div><div class="row" style="gap:8px"><span class="dot off" id="syncDotMarci"></span><strong>marci-ir &middot; Investment Outreach</strong><span class="small" id="syncDetailMarci"></span></div>';syncbox.appendChild(div);}
+
       function updateAgentSync(){var modeClass=(document.getElementById('syncDot')||{}).className||'dot off';var cDot=document.getElementById('syncDotClarence');var mDot=document.getElementById('syncDotMarci');if(cDot)cDot.className=modeClass;if(mDot)mDot.className=modeClass;
                                  function num(id){var el=document.getElementById(id);if(!el)return 0;var v=parseInt(el.textContent,10);return isNaN(v)?0:v;}
                                  var cDetail=document.getElementById('syncDetailClarence');var mDetail=document.getElementById('syncDetailMarci');
@@ -5858,9 +5856,9 @@
       updateAgentSync();
     })();
     /* ===== Real KPI numbers only: no fabricated targets (zero if none) ===== */
-    window.KPI_GOALS={'investment targets':0,'top investor priority':0,'replies this week':0,'meetings booked':0,'in conversation':0,'clarence · content queue':0,'marci-ir · investor pipeline':0};
+    window.KPI_GOALS={'targets':0,'connected':0,'need touch':0,'meetings':0};
     if(typeof decorateMetrics==='function')decorateMetrics();
-    
+
   </script>
     <div class="modal-overlay" id="previewModal" hidden>
     <div class="modal-card">
