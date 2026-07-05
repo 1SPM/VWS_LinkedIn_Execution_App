@@ -35,7 +35,7 @@
     .metric .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.metric .value{margin-top:4px;font-size:28px;font-weight:800}
     .metric.good .value{color:#8ef0c5}.metric.warn .value{color:#ffe29d}.metric.hot .value{color:#ffb0b0}
     .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-    table{width:100%;border-collapse:collapse;min-width:1280px}
+    table{width:100%;border-collapse:collapse;min-width:720px}
     th,td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
     th{position:sticky;top:0;background:#12203d;text-transform:uppercase;letter-spacing:.07em;font-size:11px;color:#dbe4ff;z-index:1}
     tbody tr:hover{background:rgba(255,255,255,.03)}
@@ -108,18 +108,7 @@
         </div>
         <div class="toolbar">
         <button class="btn good" id="btnAddTarget">+ Add Investor Target</button>
-        <button class="btn" id="btnAddGroup">+ Add Group</button>
-        <button class="btn" id="btnAddScript">+ Add Script</button>
         <button class="btn warn" id="btnSyncNow">Sync Now</button>
-        <div class="advanced-wrap">
-          <button class="btn" id="btnAdvanced" aria-haspopup="true" aria-expanded="false">⋯ Advanced</button>
-          <div class="advanced-menu" id="advancedMenu" hidden>
-            <button class="btn primary" id="btnSeed">Load Sample Data</button>
-            <button class="btn" id="btnExport">Export JSON</button>
-            <label class="btn menu-file">Import JSON<input class="hidden" id="importFile" type="file"></label>
-            <button class="btn danger" id="btnClear">Clear All</button>
-          </div>
-        </div>
       </div>
       <div class="syncbox">
         <div class="row" style="justify-content:space-between">
@@ -179,15 +168,10 @@
           </div>
           <div class="row">
             <input id="searchTargets" type="search" placeholder="Search name, org, title, notes..." />
-            <select id="filterCategory"><option value="">All Categories</option></select>
-            <select id="filterOwner" class="hidden"><option value="marci-ir">marci-ir</option></select>
-
-            <select id="filterStatus"><option value="">All DM Statuses</option></select>
-            <button class="btn" id="btnResetFilters">Reset Filters</button>
           </div>
         </div>
         <div class="table-wrap"><table id="targetsTable"><thead><tr>
-          <th>Rank</th><th>Name</th><th>Title</th><th>Organization</th><th>Category</th><th>Source</th><th>Priority Score</th><th>Mission Fit</th><th>Influence</th><th>Decision Power</th><th>Trust Potential</th><th>Strategic Leverage</th><th>Tier</th><th>Connection Status</th><th>Engagement Status</th><th>DM Status</th><th>Last Touch</th><th>Next Action</th><th>Next Action Date</th><th>Pillar</th><th>Notes</th><th>Outcome</th><th>Actions</th>
+          <th>#</th><th>Org</th><th>Segment</th><th>Channel</th><th>Status</th><th>Next</th><th>Score</th><th></th>
         </tr></thead><tbody></tbody></table></div>
       </div>
     </section>
@@ -224,22 +208,22 @@
 
     <section id="top25" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Top Targets</h2></div><button class="btn" id="btnFocusTop25">Refresh Investor Top 25</button></div><div class="table-wrap"><table id="top25Table"><thead><tr><th>Rank</th><th>Name</th><th>Category</th><th>Score</th><th>Tier</th><th>Connection</th><th>DM Status</th><th>Next Action</th><th>Next Action Date</th><th>Pillar</th><th>Notes</th></tr></thead><tbody></tbody></table></div></div></section>
 
-    <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Group Name</th><th>Category</th><th>Size</th><th>Relevance</th><th>Access Level</th><th>Admins / Influencers</th><th>Engagement Value</th><th>Notes</th><th>Action</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="groups" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Groups</h2></div><button class="btn good" id="btnAddGroup2">+ Add Group Row</button></div><div class="table-wrap"><table id="groupsTable"><thead><tr><th>Lane</th><th>Leads</th><th>Priority</th><th>Action</th><th>Notes</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
 
     <section id="strategy" class="section">
       <div class="grid cols-2">
         <div class="card"><h2>Spreadsheet Coverage</h2><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Sheet</th><th>Rows</th></tr></thead><tbody id="coverageTable"></tbody></table></div></div>
-        <div class="card"><h2>Lead Discovery Playbook</h2><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Lane</th><th>Discovery Strategy</th></tr></thead><tbody id="notesTable"></tbody></table></div></div>
+        <div class="card"><h2>Lead Discovery Playbook</h2><div class="table-wrap" style="margin-top:12px"><table style="min-width:0"><thead><tr><th>Lane</th><th>Top Orgs</th><th>Count</th></tr></thead><tbody id="notesTable"></tbody></table></div></div>
       </div>
       <div class="grid cols-2" style="margin-top:14px">
-        <div class="card"><h2>Join / Mining Sequence</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Week</th><th>Action</th><th>Target</th><th>Notes</th></tr></thead><tbody id="joinSequenceTable"></tbody></table></div></div>
-        <div class="card"><h2>Sources + Context</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Source</th><th>Why It Matters</th><th>URL</th></tr></thead><tbody id="sourcesTable"></tbody></table></div></div>
+        <div class="card"><h2>Join / Mining Sequence</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Step</th><th>Channel</th><th>Action</th></tr></thead><tbody id="joinSequenceTable"></tbody></table></div></div>
+        <div class="card"><h2>Sources + Context</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Org</th><th>Lane</th><th>Source</th></tr></thead><tbody id="sourcesTable"></tbody></table></div></div>
       </div>
-      <div class="card" style="margin-top:14px"><h2>Positioning + Trust Strategy</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Type</th><th>Finding / Direction</th><th>Action / Why</th></tr></thead><tbody id="strategyTable"></tbody></table></div></div>
+      <div class="card" style="margin-top:14px"><h2>Positioning + Trust Strategy</h2><div class="table-wrap"><table style="min-width:0"><thead><tr><th>Lane</th><th>Angle</th><th>CTA</th></tr></thead><tbody id="strategyTable"></tbody></table></div></div>
     </section>
 
-    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Scripts</h2></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Pillar</th><th>Audience</th><th>Source Type</th><th>Source / Link</th><th>Sequence Role</th><th>Hook (summary)</th><th>Full Draft</th><th>CTA</th><th>Use Case</th><th>Status</th><th>Created</th><th>Publish-Ready</th><th>Preview</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
+    <section id="scripts" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Scripts</h2></div><button class="btn good" id="btnAddScript2">+ Add Script Row</button></div><div class="table-wrap"><table id="scriptsTable"><thead><tr><th>Type</th><th>Title</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></div></section>
 
     <section id="weekly" class="section"><div class="card"><div class="row" style="justify-content:space-between"><div><h2>Weekly Plan</h2></div><button class="btn" id="btnLoadWeek">Reset Week Template</button></div><div class="table-wrap"><table id="weeklyTable" style="min-width:0"><thead><tr><th>Day</th><th>Focus</th><th>Output</th><th>Completed</th></tr></thead><tbody></tbody></table></div></div></section>
 
@@ -256,7 +240,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'vws_marci_ir_investor_workbook_v2';
+    const STORAGE_KEY = 'vws_marci_ir_simple_ui_v3';
     const APP_CONFIG = window.APP_CONFIG || { supabaseUrl:'', supabaseAnonKey:'', tableName:'vws_dashboard_state', rowId:'primary' };
     const hasConfig = !!(APP_CONFIG.supabaseUrl && APP_CONFIG.supabaseAnonKey);
     const CATEGORIES = ['Faith-Driven Capital','Family Office / DAF','Strategic / Partner','Venture / Angels','International / Offshore','Nonprofit / Grant','Faith-Tech Ecosystem'];
@@ -5632,7 +5616,7 @@
 
     function refreshFilters(){ const cat=document.getElementById('filterCategory'); const owner=document.getElementById('filterOwner'); const stat=document.getElementById('filterStatus'); const catVal=cat?.value || ''; const statVal=stat?.value || ''; if(cat){ cat.innerHTML='<option value="">All Categories</option>'+CATEGORIES.map(c=>`<option>${c}</option>`).join(''); cat.value=catVal; } if(owner){ owner.innerHTML='<option value="marci-ir">marci-ir</option>'; owner.value='marci-ir'; } if(stat){ stat.innerHTML='<option value="">All DM Statuses</option>'+DMSTATUS.map(s=>`<option>${s}</option>`).join(''); stat.value=statVal; } }
     function getInvestorTargets(){ return state.targets.filter(t=>ownerForTarget(t)==='marci-ir'); }
-    function getFilteredTargets(){ const q=document.getElementById('searchTargets').value.trim().toLowerCase(); const cat=document.getElementById('filterCategory').value; const st=document.getElementById('filterStatus').value; return getInvestorTargets().filter(t=>{ const hay=[t.name,t.title,t.org,t.category,t.source,t.notes,t.pillar,t.outcome,t.workstream,t.conn,t.eng,t.dm,t.next,t.nextDate].join(' ').toLowerCase(); return (!q||hay.includes(q)) && (!cat||t.category===cat) && (!st||t.dm===st); }).sort((a,b)=>total(b)-total(a)); }
+    function getFilteredTargets(){ const q=(document.getElementById('searchTargets')?.value||'').trim().toLowerCase(); const cat=document.getElementById('filterCategory')?.value||''; const st=document.getElementById('filterStatus')?.value||''; return getInvestorTargets().filter(t=>{ const hay=[t.name,t.title,t.org,t.category,t.source,t.notes,t.pillar,t.outcome,t.workstream,t.conn,t.eng,t.dm,t.next,t.nextDate].join(' ').toLowerCase(); return (!q||hay.includes(q)) && (!cat||t.category===cat) && (!st||t.dm===st); }).sort((a,b)=>total(b)-total(a)); }
     function selectCell(idx,key,val,options,table='targets'){ return `<td><select class="status-select" data-table="${table}" data-idx="${idx}" data-key="${key}">${options.map(o=>`<option ${o===val?'selected':''}>${esc(o)}</option>`).join('')}</select></td>`; }
     function editableCell(value, idx, key, table='targets'){ return `<td contenteditable="true" data-table="${table}" data-idx="${idx}" data-key="${key}">${esc(value)}</td>`; }
     function workstreamForOwner(owner){ return WORKSTREAMS[owner] || 'Investment Outreach'; }
@@ -5644,12 +5628,15 @@
     function countActive(owner){ return getOwnerTargets(owner).filter(t=>['Requested','Connected','Sent','Replied','Follow-up','Booked'].includes(t.dm)).length; }
     function countOverdue(owner){ return getOwnerTargets(owner).filter(t=>{ const d=String(t.nextDate||'').trim(); return d && t.dm!=='Booked'; }).length; }
 
-    function renderTargets(){ refreshFilters(); const rows=getFilteredTargets(); const tbody=document.querySelector('#targetsTable tbody'); tbody.innerHTML=rows.map((t,i)=>{ const actualIndex=state.targets.indexOf(t); state.targets[actualIndex].owner='marci-ir'; state.targets[actualIndex].workstream='Investment Outreach'; return `<tr>
-      <td>${i+1}</td>${editableCell(t.name,actualIndex,'name')}${editableCell(t.title,actualIndex,'title')}${editableCell(t.org,actualIndex,'org')}${editableCell(t.category,actualIndex,'category')}${editableCell(t.source,actualIndex,'source')}${editableCell(total(t),actualIndex,'score')}${editableCell(t.mf,actualIndex,'mf')}${editableCell(t.inf,actualIndex,'inf')}${editableCell(t.dp,actualIndex,'dp')}${editableCell(t.tp,actualIndex,'tp')}${editableCell(t.sl,actualIndex,'sl')}<td>${tier(total(t))}</td>${selectCell(actualIndex,'conn',t.conn,CONNECTION)}${selectCell(actualIndex,'eng',t.eng,ENGAGEMENT)}${selectCell(actualIndex,'dm',t.dm,DMSTATUS)}${editableCell(t.last,actualIndex,'last')}${selectCell(actualIndex,'next',t.next,NEXTACTION)}${editableCell(t.nextDate,actualIndex,'nextDate')}${selectCell(actualIndex,'pillar',t.pillar,PILLARS)}${editableCell(t.notes,actualIndex,'notes')}${selectCell(actualIndex,'outcome',t.outcome,OUTCOMES)}<td><button class="btn danger" data-del-target="${actualIndex}">Delete</button></td>
-    </tr>`; }).join('') || `<tr><td colspan="23" class="muted">No marci-ir investment targets match the current filters.</td></tr>`; bindDeleteButtons('targets'); bindCellEdits('targets'); bindSelects('targets'); updateDashboard(); }
+    function renderTargets(){ refreshFilters(); const rows=getFilteredTargets(); const tbody=document.querySelector('#targetsTable tbody'); tbody.innerHTML=rows.map((t,i)=>{ const actualIndex=state.targets.indexOf(t); const status=t.dm==='Booked'?'Booked':t.dm==='Replied'?'Replied':t.conn==='Connected'?'Connected':'Needs touch'; return `<tr>
+      <td>${i+1}</td><td>${esc(t.name)}</td><td>${esc(t.category)}</td><td>${esc(t.bestInitialChannel||t.source||'')}</td><td>${statusPill(status)}</td><td>${esc(t.next||'Research')}</td><td>${total(t)}</td><td><button class="btn" data-preview-target="${actualIndex}">Open</button></td>
+    </tr>`; }).join('') || `<tr><td colspan="8" class="muted">No targets match.</td></tr>`; bindTargetPreviewButtons(); updateDashboard(); }
+
     function renderTop25(){ const top=getInvestorTargets().sort((a,b)=>total(b)-total(a)).slice(0,25); const tbody=document.querySelector('#top25Table tbody'); tbody.innerHTML=top.map((t,i)=>`<tr><td>${i+1}</td><td>${esc(t.name)}</td><td>${esc(t.category)}</td><td>${total(t)}</td><td>${tier(total(t))}</td><td>${statusPill(t.conn)}</td><td>${statusPill(t.dm)}</td><td>${esc(t.next)}</td><td>${esc(t.nextDate)}</td><td>${esc(t.pillar)}</td><td class="notebox">${esc(t.notes)}</td></tr>`).join('') || `<tr><td colspan="11" class="muted">Add marci-ir investment targets to generate Investor Top 25.</td></tr>`; }
-    function renderGroups(){ const tbody=document.querySelector('#groupsTable tbody'); tbody.innerHTML=state.groups.map((g,i)=>`<tr><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="name">${esc(g.name)}</td><td><select data-table="groups" data-idx="${i}" data-key="category">${['',...CATEGORIES].map(x=>`<option ${x===g.category?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="size">${esc(g.size)}</td><td><select data-table="groups" data-idx="${i}" data-key="relevance">${RELEVANCE.map(x=>`<option ${x===g.relevance?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="groups" data-idx="${i}" data-key="access">${ACCESS.map(x=>`<option ${x===g.access?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="admins">${esc(g.admins)}</td><td><select data-table="groups" data-idx="${i}" data-key="value">${ENGVAL.map(x=>`<option ${x===g.value?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="groups" data-idx="${i}" data-key="notes">${esc(g.notes)}</td><td><select data-table="groups" data-idx="${i}" data-key="action">${GROUP_ACTIONS.map(x=>`<option ${x===g.action?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><button class="btn danger" data-del-group="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="10" class="muted">No groups yet.</td></tr>`; bindDeleteButtons('groups'); bindCellEdits('groups'); bindSelects('groups'); }
-    function renderScripts(){ const tbody=document.querySelector('#scriptsTable tbody'); tbody.innerHTML=state.scripts.map((s,i)=>`<tr class="${isStaleScript(s)?'stale-row':''}"><td><select data-table="scripts" data-idx="${i}" data-key="pillar">${PILLARS.map(x=>`<option ${x===s.pillar?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="audience">${AUDIENCES.map(x=>`<option ${x===s.audience?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select data-table="scripts" data-idx="${i}" data-key="sourceType">${SOURCE_TYPES.map(x=>`<option ${x===(s.sourceType||'Original R&D')?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="sourceUrl">${esc(s.sourceUrl||'')}</td><td><select data-table="scripts" data-idx="${i}" data-key="sequenceRole">${SEQUENCE_ROLES.map(x=>`<option ${x===(s.sequenceRole||'Anchor Article')?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="hook">${esc(s.hook)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="draft">${esc(s.draft)}</td><td contenteditable="true" data-table="scripts" data-idx="${i}" data-key="cta">${esc(s.cta)}</td><td><select data-table="scripts" data-idx="${i}" data-key="use">${USECASES.map(x=>`<option ${x===s.use?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><select class="status-select ${statusColorClass(s.status)}" data-table="scripts" data-idx="${i}" data-key="status">${SCRIPT_STATUS.map(x=>`<option ${x===s.status?'selected':''}>${esc(x)}</option>`).join('')}</select></td><td><input type="date" class="cell-date" data-idx="${i}" data-key="createdDate" value="${s.createdDate||''}"></td><td><input type="date" class="cell-date" data-idx="${i}" data-key="publishReadyDate" value="${s.publishReadyDate||''}"></td><td><button class="btn" data-preview-idx="${i}">Preview</button></td><td><button class="btn danger" data-del-script="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="14" class="muted">No scripts yet.</td></tr>`; bindDeleteButtons('scripts'); bindCellEdits('scripts'); bindSelects('scripts'); bindScriptDates(); bindPreviewButtons(); }
+    function renderGroups(){ const tbody=document.querySelector('#groupsTable tbody'); tbody.innerHTML=state.groups.map((g,i)=>`<tr><td>${esc(g.name)}</td><td>${esc(g.size)}</td><td>${statusPill(g.relevance)}</td><td>${esc(g.action)}</td><td>${esc(g.notes)}</td><td><button class="btn danger" data-del-group="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="6" class="muted">No groups yet.</td></tr>`; bindDeleteButtons('groups'); }
+
+    function renderScripts(){ const tbody=document.querySelector('#scriptsTable tbody'); tbody.innerHTML=state.scripts.map((s,i)=>`<tr class="${isStaleScript(s)?'stale-row':''}"><td>${esc(s.sequenceRole||s.use||'Script')}</td><td>${esc(s.hook||'Untitled')}</td><td>${statusPill(s.status||'Draft')}</td><td><button class="btn" data-preview-idx="${i}">Open</button> <button class="btn danger" data-del-script="${i}">Delete</button></td></tr>`).join('') || `<tr><td colspan="4" class="muted">No scripts yet.</td></tr>`; bindDeleteButtons('scripts'); bindPreviewButtons(); }
+
 
     function rowCells(cells){ return `<tr>${cells.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`; }
     function renderStrategy(){
@@ -5663,16 +5650,13 @@
       const cov = document.getElementById('coverageTable');
       if(cov) cov.innerHTML = coverage.map(r=>rowCells([r.Sheet, r.Rows])).join('');
       const nt = document.getElementById('notesTable');
-      if(nt) nt.innerHTML = lanes.map(r=>rowCells([r.Lane, `${r.Count} leads · ${r['Top Organizations']} · ${r['Discovery Strategy']}`])).join('');
+      if(nt) nt.innerHTML = lanes.map(r=>rowCells([r.Lane, r['Top Organizations'], r.Count])).join('');
       const js = document.getElementById('joinSequenceTable');
-      if(js) js.innerHTML = cadence.map(r=>rowCells([r['Day/Step'], r.Channel, r.Audience, `${r.Action} · ${r['Compliance Note']}`])).join('');
+      if(js) js.innerHTML = cadence.map(r=>rowCells([r['Day/Step'], r.Channel, r.Action])).join('');
       const st = document.getElementById('sourcesTable');
       if(st) st.innerHTML = sources.map(r=>rowCells([r.Organization, r.Lane, r['Source URL']])).join('');
       const strat = document.getElementById('strategyTable');
-      if(strat) strat.innerHTML = [
-        ...angles.map(r=>rowCells([r['Target Lane'], r['Opening Angle'], `${r['Best CTA']} · Avoid: ${r.Avoid}`])),
-        ...compliance.map(r=>rowCells([r.Rule, r['Practical Instruction'], r['Why It Matters']]))
-      ].join('');
+      if(strat) strat.innerHTML = angles.map(r=>rowCells([r['Target Lane'], r['Opening Angle'], r['Best CTA']])).join('');
     }
 
     function renderWeekly(){ const tbody=document.querySelector('#weeklyTable tbody'); tbody.innerHTML=state.weekly.map((w,i)=>`<tr><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="0">${esc(w[0])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="1">${esc(w[1])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="2">${esc(w[2])}</td><td contenteditable="true" data-table="weekly" data-idx="${i}" data-key="3">${esc(w[3])}</td></tr>`).join(''); bindCellEdits('weekly'); }
@@ -5694,18 +5678,33 @@
     async function syncNow(){ saveLocal(); if(currentUser) await saveRemote(); else setSyncUI(hasConfig ? 'auth' : 'local', hasConfig ? 'Sign in to sync to Supabase.' : 'No shared storage configured yet.'); }
 
     document.getElementById('navTabs').addEventListener('click', e=>{ const tab=e.target.closest('.tab'); if(!tab) return; activeSection(tab.dataset.tab); });
-    document.getElementById('btnAddTarget').onclick=addTarget; document.getElementById('btnAddGroup').onclick=addGroup; document.getElementById('btnAddGroup2').onclick=addGroup; document.getElementById('btnAddScript').onclick=addScript; document.getElementById('btnAddScript2').onclick=addScript; document.getElementById('btnLoadWeek').onclick=resetWeek; document.getElementById('btnFocusTop25').onclick=()=>{ renderTop25(); activeSection('top25'); };
+    const on=(id,fn)=>{ const el=document.getElementById(id); if(el) el.onclick=fn; }; on('btnAddTarget',addTarget); on('btnAddGroup',addGroup); on('btnAddGroup2',addGroup); on('btnAddScript',addScript); on('btnAddScript2',addScript); on('btnLoadWeek',resetWeek); on('btnFocusTop25',()=>{ renderTop25(); activeSection('top25'); });
     document.getElementById('btnSeed').onclick=()=>{ state = defaultData(); saveAll(); };
     document.getElementById('btnClear').onclick=()=>{ if(confirm('Clear all dashboard data from this browser?')){ localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(STORAGE_KEY+'_ts'); state = defaultData(); state.targets=[]; state.groups=[]; state.scripts=[]; state.weekly = defaultData().weekly; saveAll(); } };
     document.getElementById('btnExport').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='vws-linkedin-dashboard-data.json'; a.click(); URL.revokeObjectURL(a.href); };
     document.getElementById('importFile').addEventListener('change', async e=>{ const file=e.target.files?.[0]; if(!file) return; try{ state=normalizeState(JSON.parse(await file.text())); saveAll(); } catch { alert('Invalid JSON file'); } e.target.value=''; });
-    document.getElementById('searchTargets').oninput=renderTargets; document.getElementById('filterCategory').onchange=renderTargets; document.getElementById('filterOwner').onchange=renderTargets; document.getElementById('filterStatus').onchange=renderTargets; document.getElementById('btnResetFilters').onclick=()=>{ document.getElementById('searchTargets').value=''; document.getElementById('filterCategory').value=''; document.getElementById('filterOwner').value=''; document.getElementById('filterStatus').value=''; renderTargets(); };
+    document.getElementById('searchTargets').oninput=renderTargets; ['filterCategory','filterOwner','filterStatus'].forEach(id=>{ const el=document.getElementById(id); if(el) el.onchange=renderTargets; }); on('btnResetFilters',()=>{ document.getElementById('searchTargets').value=''; ['filterCategory','filterOwner','filterStatus'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; }); renderTargets(); });
     document.getElementById('btnMagicLink').onclick=sendMagicLink; document.getElementById('btnSignOut').onclick=signOut; document.getElementById('btnSyncNow').onclick=syncNow;
     function renderFilters(){ const cat=document.getElementById('filterCategory'); const stat=document.getElementById('filterStatus'); const cval=cat.value, sval=stat.value; cat.innerHTML='<option value="">All Categories</option>'+CATEGORIES.map(c=>`<option>${c}</option>`).join(''); stat.innerHTML='<option value="">All DM Statuses</option>'+DMSTATUS.map(s=>`<option>${s}</option>`).join(''); cat.value=cval; stat.value=sval; }
     function bindScriptDates(){
       document.querySelectorAll('input.cell-date').forEach(inp=>{
         inp.onchange=()=>{ const idx=+inp.dataset.idx, key=inp.dataset.key; state.scripts[idx][key]=inp.value; saveAll(); };
       });
+    }
+
+    function bindTargetPreviewButtons(){
+      document.querySelectorAll('[data-preview-target]').forEach(btn=>{
+        btn.onclick=()=>openTarget(state.targets[+btn.dataset.previewTarget]);
+      });
+    }
+    function openTarget(t){
+      if(!t) return;
+      document.getElementById('previewBody').innerHTML =
+        '<h2>'+esc(t.name||'Target')+'</h2>'+
+        '<div class="meta-grid"><span class="meta-chip">'+esc(t.category||'')+'</span><span class="meta-chip">Score '+esc(total(t))+'</span><span class="meta-chip">'+esc(t.conn||'')+'</span></div>'+
+        '<div class="body-text">'+esc([t.primaryAsk,t.bestInitialChannel,t.notes].filter(Boolean).join('\n\n'))+'</div>';
+      document.getElementById('previewModal').hidden=false;
+      document.body.style.overflow='hidden';
     }
     function bindPreviewButtons(){
       document.querySelectorAll('[data-preview-idx]').forEach(btn=>{
@@ -5773,39 +5772,15 @@
     }
     function openPreview(s){
       if(!s) return;
-      const meta = [
-        'Date Created: '+esc(s.createdDate || 'Not set'),
-        s.publishReadyDate ? 'Publish-Ready: '+esc(s.publishReadyDate) : '',
-        s.sourceType ? 'Source: '+esc(s.sourceType) : '',
-        s.sequenceRole ? 'Sequence Role: '+esc(s.sequenceRole) : '',
-        s.status ? 'Status: '+esc(s.status) : ''
-      ].filter(Boolean).map(x=>'<span class="meta-chip">'+x+'</span>').join('');
-      const formats = derivedFormats(s);
-      const formatNav = '<div class="format-toolbar">'+formats.map(f=>'<button class="format-tab '+(f.name===s.use?'active':'')+'" data-format-target="'+esc(f.name)+'">'+esc(f.name)+'</button>').join('')+'</div>';
-      const formatCards = formats.map(f=>'<section class="format-card '+(f.name===s.use?'active':'')+'" data-format-card="'+esc(f.name)+'"><div class="format-card-header"><h3>'+esc(f.name)+'</h3><button class="format-copy" data-copy-format="'+esc(f.name)+'">Copy section</button></div><div class="format-note">'+esc(f.note)+'</div><div class="format-text">'+esc(f.text)+'</div><div class="format-count">'+esc(formatCount(f.text))+'</div></section>').join('');
       document.getElementById('previewBody').innerHTML =
-        '<h2>'+esc(s.hook||'Untitled')+'</h2>'+
-        '<div class="byline">Full-length source → use-case previews'+(s.owner?' · by '+esc(s.owner):'')+'</div>'+
-        '<div class="meta-grid">'+meta+'</div>'+
-        formatNav+formatCards+
-        (s.cta?'<div class="cta">Base CTA: '+esc(s.cta)+'</div>':'');
-      document.querySelectorAll('[data-format-target]').forEach(btn=>{
-        btn.onclick=()=>document.querySelector(`[data-format-card="${CSS.escape(btn.dataset.formatTarget)}"]`)?.scrollIntoView({behavior:'smooth',block:'start'});
-      });
-      document.querySelectorAll('[data-copy-format]').forEach(btn=>{
-        btn.onclick=async()=>{
-          const item = formats.find(f=>f.name===btn.dataset.copyFormat);
-          if(!item) return;
-          try{
-            await navigator.clipboard.writeText(item.text);
-            btn.textContent='Copied';
-            setTimeout(()=>btn.textContent='Copy section',1200);
-          }catch(_){ }
-        };
-      });
+        '<h2>'+esc(s.hook||'Script')+'</h2>'+
+        '<div class="meta-grid"><span class="meta-chip">'+esc(s.sequenceRole||s.use||'')+'</span><span class="meta-chip">'+esc(s.status||'')+'</span></div>'+
+        '<div class="body-text">'+esc(s.draft||'')+'</div>'+
+        (s.cta?'<div class="cta">'+esc(s.cta)+'</div>':'');
       document.getElementById('previewModal').hidden=false;
       document.body.style.overflow='hidden';
     }
+
     function wireAdvancedUI(){
       const advBtn=document.getElementById('btnAdvanced'), advMenu=document.getElementById('advancedMenu');
       if(advBtn && advMenu){
@@ -5823,42 +5798,7 @@
     }
     async function boot(){ syncDerivedScores(); renderAll(); wireAdvancedUI(); renderFilters(); saveLocal(); if(hasConfig && window.supabase){ await initSupabase(); if(currentUser) await loadRemote(); } else setSyncUI('local','No shared storage configured yet. Add Supabase URL and anon key in config.js to enable sync.'); }
       if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
-    /* ===== KPI Quick-View Enhancements ===== */
-    window.__kpiConnFilterVal='';window.KPI_GOALS={'total targets':25,'top priority':15,'replies this week':10,'meetings booked':3,'in conversation':5};
-    (function(){var owner=document.getElementById('filterOwner');if(owner&&!document.getElementById('filterConn')){var s=document.createElement('select');s.id='filterConn';s.innerHTML='<option value="">All Connection</option>'+['Uncontacted','Requested','Connected'].map(function(v){return '<option>'+v+'</option>';}).join('');owner.insertAdjacentElement('afterend',s);s.addEventListener('change',function(){window.__kpiConnFilterVal=s.value;renderTargets();});}})();
-    if(!window.__origGetFiltered){window.__origGetFiltered=getFilteredTargets;window.getFilteredTargets=function(){var r=window.__origGetFiltered.apply(this,arguments);var v=window.__kpiConnFilterVal;if(v&&Array.isArray(r))r=r.filter(function(t){return t.conn===v;});return r;};}
-    (function(){var rb=document.getElementById('btnResetFilters');if(rb)rb.addEventListener('click',function(){window.__kpiConnFilterVal='';var c=document.getElementById('filterConn');if(c)c.value='';setTimeout(renderTargets,0);});})();
-    function goToTargetsFiltered(o){o=o||{};document.querySelector('.tab[data-tab="targets"]').click();var set=function(id,val){var e=document.getElementById(id);if(e){e.value=val||'';e.dispatchEvent(new Event('change',{bubbles:true}));}};set('filterCategory',o.category);set('filterOwner','marci-ir');set('filterStatus',o.status);window.__kpiConnFilterVal=o.conn||'';var c=document.getElementById('filterConn');if(c)c.value=o.conn||'';renderTargets();}
-    function _lbl(c){var e=c.querySelector('.label,.n');return (e?e.textContent:'').trim().toLowerCase();}
-    function _val(c){var e=c.querySelector('.value,.v');return e?parseInt(e.textContent.replace(/[^\d-]/g,''),10):NaN;}
-    function wireKpiDrilldowns(){var map={'targets':{},'connected':{conn:'Connected'},'need touch':{conn:'Uncontacted'},'meetings':{status:'Booked'}};document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(card){if(card.dataset.drill)return;var l=_lbl(card),f=map[l];var go;if(l.indexOf('clarence')===0){go=function(){document.querySelector('.tab[data-tab="scripts"]').click();};}else if(f){go=function(){goToTargetsFiltered(f);};}else{return;}card.dataset.drill='1';card.style.cursor='pointer';card.setAttribute('role','button');card.tabIndex=0;card.title=l.indexOf('clarence')===0?'View Clarence content queue':'View marci-ir investment targets';card.addEventListener('click',go);card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});card.addEventListener('mouseenter',function(){card.style.outline='1px solid rgba(125,211,252,.5)';});card.addEventListener('mouseleave',function(){card.style.outline='';});});document.querySelectorAll('#dashboard .card table tbody tr').forEach(function(tr){if(tr.dataset.drill)return;var td=tr.querySelector('td');var key=td?td.textContent.trim():'';if(!key)return;tr.dataset.drill='1';tr.style.cursor='pointer';var conn=['Uncontacted','Requested','Connected'],dm=['Not Sent','Sent','Replied','Follow-up','Booked'];var f=conn.indexOf(key)>-1?{conn:key}:dm.indexOf(key)>-1?{status:key}:{category:key};tr.addEventListener('click',function(){goToTargetsFiltered(f);});tr.addEventListener('mouseenter',function(){tr.style.background='rgba(125,211,252,.08)';});tr.addEventListener('mouseleave',function(){tr.style.background='';});});}
-    function snapshotKpis(){var snap={};document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(c){var l=_lbl(c),v=_val(c);if(l&&!isNaN(v))snap[l]=v;});localStorage.setItem('vws_kpi_snapshot',JSON.stringify({date:new Date().toISOString().slice(0,10),vals:snap}));return snap;}
-    function decorateMetrics(){var snap={};try{snap=(JSON.parse(localStorage.getItem('vws_kpi_snapshot')||'{}').vals)||{};}catch(e){}document.querySelectorAll('#dashboard .metric, #dashboard .preview').forEach(function(c){var l=_lbl(c),cur=_val(c);if(isNaN(cur))return;var goal=window.KPI_GOALS[l],prev=snap[l],parts=[];if(goal!=null&&goal>0)parts.push(cur+' / '+goal);if(prev!=null){var d=cur-prev;parts.push(d>0?'▲ '+d:d<0?'▼ '+Math.abs(d):'– 0');}var sub=c.querySelector('.kpi-sub');if(!sub){sub=document.createElement('div');sub.className='kpi-sub';sub.style.cssText='font-size:11px;opacity:.65;margin-top:4px';c.appendChild(sub);}sub.textContent=parts.join('   ·   ');});}
-    function renderKpiReview(){var T=window.__origGetFiltered?window.__origGetFiltered():JSON.parse(localStorage.getItem('vws_linkedin_dashboard_v3')).targets;var by=function(f){return T.filter(f).length;};var sent=by(function(t){return t.dm&&t.dm!=='Not Sent';});var repl=by(function(t){return t.dm==='Replied'||t.dm==='Follow-up'||t.dm==='Booked';});var nums={'Connection accepts':by(function(t){return t.conn==='Connected';}),'DM response rate':sent?Math.round(repl/sent*100)+'% ('+repl+'/'+sent+')':'0% (0/0)','Conversations started':by(function(t){return t.dm==='Replied'||t.dm==='Follow-up';}),'Meetings booked':by(function(t){return t.dm==='Booked';}),'Follow-up replies':by(function(t){return t.dm==='Follow-up';}),'Introductions received':by(function(t){return t.outcome==='Intro';}),'Partnerships':by(function(t){return t.outcome==='Partner'||t.outcome==='Partnership';})};document.querySelectorAll('#kpis li').forEach(function(li){var key=li.dataset.k||li.textContent.replace(/\s*[:—–]\s.*$/,'').replace(/\s+(manual|\d.*)$/,'').trim();li.dataset.k=key;if(nums[key]!=null)li.innerHTML=key+' <strong style="float:right;color:#7dd3fc">'+nums[key]+'</strong>';else if(!li.querySelector('.manual-tag'))li.innerHTML=key+' <span class="manual-tag" style="float:right;color:#64748b;font-size:11px">manual</span>';});}
-    if(!window.__updDashOrig){window.__updDashOrig=updateDashboard;window.updateDashboard=function(){var r=window.__updDashOrig.apply(this,arguments);try{wireKpiDrilldowns();decorateMetrics();}catch(e){}return r;};}
-    if(typeof activeSection==='function'&&!window.__actSecOrig){window.__actSecOrig=activeSection;window.activeSection=function(name){var r=window.__actSecOrig.apply(this,arguments);try{if((name||'').indexOf('kpi')>-1)renderKpiReview();if((name||'').indexOf('dash')>-1){wireKpiDrilldowns();decorateMetrics();}}catch(e){}return r;};}
-    (function(){var sb=document.getElementById('btnSyncNow');if(sb)sb.addEventListener('click',function(){setTimeout(function(){try{snapshotKpis();decorateMetrics();}catch(e){}},400);});})();
-    (function(){var s=document.getElementById('kpis');if(s&&!document.getElementById('btnSnapWeek')){var b=document.createElement('button');b.id='btnSnapWeek';b.textContent='Snapshot Week';b.className='btn';b.style.marginBottom='10px';b.onclick=function(){snapshotKpis();b.textContent='Snapshot saved';setTimeout(function(){b.textContent='Snapshot Week';},1500);};s.insertBefore(b,s.firstChild.nextSibling);}})();
-    try{wireKpiDrilldowns();decorateMetrics();renderKpiReview();}catch(e){}
-    /* ===== end enhancements ===== */
-    /* ===== Agent sync status (Clarence + marci-ir) ===== */
-    (function(){
-      var syncbox=document.querySelector('.syncbox');
-
-      function updateAgentSync(){var modeClass=(document.getElementById('syncDot')||{}).className||'dot off';var cDot=document.getElementById('syncDotClarence');var mDot=document.getElementById('syncDotMarci');if(cDot)cDot.className=modeClass;if(mDot)mDot.className=modeClass;
-                                 function num(id){var el=document.getElementById(id);if(!el)return 0;var v=parseInt(el.textContent,10);return isNaN(v)?0:v;}
-                                 var cDetail=document.getElementById('syncDetailClarence');var mDetail=document.getElementById('syncDetailMarci');
-                                 if(cDetail)cDetail.textContent=num('wClarenceTargets')+' targets \u00b7 '+num('wClarenceActive')+' active \u00b7 '+num('wClarenceOverdue')+' overdue \u00b7 '+num('wClarenceDone')+' done this wk';
-                                 if(mDetail)mDetail.textContent=num('wmarci-irTargets')+' targets \u00b7 '+num('wmarci-irActive')+' active \u00b7 '+num('wmarci-irOverdue')+' overdue \u00b7 '+num('wmarci-irDone')+' done this wk';}
-      window.updateAgentSync=updateAgentSync;
-      if(typeof window.setSyncUI==='function'&&!window.__setSyncUIWrapped){var origSetSyncUI=window.setSyncUI;window.setSyncUI=function(mode,detail){origSetSyncUI(mode,detail);updateAgentSync();};window.__setSyncUIWrapped=true;}
-      ['updateDashboard','activeSection'].forEach(function(fn){if(typeof window[fn]==='function'&&!window['__agentSyncWrapped_'+fn]){var orig=window[fn];window[fn]=function(){var r=orig.apply(this,arguments);updateAgentSync();return r;};window['__agentSyncWrapped_'+fn]=true;}});
-      updateAgentSync();
-    })();
-    /* ===== Real KPI numbers only: no fabricated targets (zero if none) ===== */
-    window.KPI_GOALS={'targets':0,'connected':0,'need touch':0,'meetings':0};
-    if(typeof decorateMetrics==='function')decorateMetrics();
-
+    setTimeout(()=>{ renderAll(); },0);
   </script>
     <div class="modal-overlay" id="previewModal" hidden>
     <div class="modal-card">
@@ -5867,5 +5807,9 @@
       <button class="btn primary btn-copy" id="previewCopy">Copy to clipboard</button>
     </div>
   </div>
+
+  <script id="guaranteed-simple-ui-render">
+    setTimeout(()=>{ if(typeof renderAll==='function') renderAll(); },0);
+  </script>
 </body>
 </html>
