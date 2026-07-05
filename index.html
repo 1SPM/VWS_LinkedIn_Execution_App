@@ -1299,6 +1299,23 @@ DivinityAGI is helping us see that difference more clearly.`, cta:'Publish to Su
     (function(){var s=document.getElementById('kpis');if(s&&!document.getElementById('btnSnapWeek')){var b=document.createElement('button');b.id='btnSnapWeek';b.textContent='Snapshot Week';b.className='btn';b.style.marginBottom='10px';b.onclick=function(){snapshotKpis();b.textContent='Snapshot saved';setTimeout(function(){b.textContent='Snapshot Week';},1500);};s.insertBefore(b,s.firstChild.nextSibling);}})();
     try{wireKpiDrilldowns();decorateMetrics();renderKpiReview();}catch(e){}
     /* ===== end enhancements ===== */
+    /* ===== Agent sync status (Clarence + marci-ir) ===== */
+    (function(){
+      var syncbox=document.querySelector('.syncbox');
+      if(syncbox&&!document.getElementById('agentSyncRow')){var div=document.createElement('div');div.className='row';div.id='agentSyncRow';div.style.cssText='margin-top:10px;gap:24px;flex-wrap:wrap';div.innerHTML='<div class="row" style="gap:8px"><span class="dot off" id="syncDotClarence"></span><strong>Clarence &middot; Marketing</strong><span class="small" id="syncDetailClarence"></span></div><div class="row" style="gap:8px"><span class="dot off" id="syncDotMarci"></span><strong>marci-ir &middot; Investment Outreach</strong><span class="small" id="syncDetailMarci"></span></div>';syncbox.appendChild(div);}
+      function updateAgentSync(){var modeClass=(document.getElementById('syncDot')||{}).className||'dot off';var cDot=document.getElementById('syncDotClarence');var mDot=document.getElementById('syncDotMarci');if(cDot)cDot.className=modeClass;if(mDot)mDot.className=modeClass;
+                                 function num(id){var el=document.getElementById(id);if(!el)return 0;var v=parseInt(el.textContent,10);return isNaN(v)?0:v;}
+                                 var cDetail=document.getElementById('syncDetailClarence');var mDetail=document.getElementById('syncDetailMarci');
+                                 if(cDetail)cDetail.textContent=num('wClarenceTargets')+' targets \u00b7 '+num('wClarenceActive')+' active \u00b7 '+num('wClarenceOverdue')+' overdue \u00b7 '+num('wClarenceDone')+' done this wk';
+                                 if(mDetail)mDetail.textContent=num('wmarci-irTargets')+' targets \u00b7 '+num('wmarci-irActive')+' active \u00b7 '+num('wmarci-irOverdue')+' overdue \u00b7 '+num('wmarci-irDone')+' done this wk';}
+      window.updateAgentSync=updateAgentSync;
+      if(typeof window.setSyncUI==='function'&&!window.__setSyncUIWrapped){var origSetSyncUI=window.setSyncUI;window.setSyncUI=function(mode,detail){origSetSyncUI(mode,detail);updateAgentSync();};window.__setSyncUIWrapped=true;}
+      ['updateDashboard','activeSection'].forEach(function(fn){if(typeof window[fn]==='function'&&!window['__agentSyncWrapped_'+fn]){var orig=window[fn];window[fn]=function(){var r=orig.apply(this,arguments);updateAgentSync();return r;};window['__agentSyncWrapped_'+fn]=true;}});
+      updateAgentSync();
+    })();
+    /* ===== Real KPI numbers only: no fabricated targets (zero if none) ===== */
+    window.KPI_GOALS={'total targets':0,'top priority':0,'replies this week':0,'meetings booked':0,'in conversation':0};
+    if(typeof decorateMetrics==='function')decorateMetrics();
     
   </script>
     <div class="modal-overlay" id="previewModal" hidden>
